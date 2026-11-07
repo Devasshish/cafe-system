@@ -1,7 +1,10 @@
 import React from 'react';
-import { Sparkles, Clock, ShieldCheck } from 'lucide-react';
+import { Sparkles, Clock, ShieldCheck, MapPin } from 'lucide-react';
+import { useTable } from '../context/TableContext';
 
 const HeroSection = () => {
+  const { tableNumber, hasTable } = useTable();
+
   return (
     <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#2e1c14] to-[#452b1e] text-[#faf7f2] p-8 sm:p-12 mb-10 shadow-lg border border-[#523324]">
       {/* Background aesthetic glow */}
@@ -9,16 +12,24 @@ const HeroSection = () => {
       <div className="absolute -bottom-10 -left-10 w-72 h-72 bg-[#df9755]/10 rounded-full blur-2xl pointer-events-none" />
 
       <div className="relative z-10 max-w-2xl">
-        {/* Subtle pill tag */}
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#c86227]/20 border border-[#c86227]/40 text-xs font-medium text-[#f6be95] mb-4">
-          <Sparkles className="w-3.5 h-3.5 text-[#df9755]" />
-          <span>Freshly Roasted Daily • Single Origin</span>
-        </div>
+        {/* Table greeting badge if scanned */}
+        {hasTable ? (
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#c86227] text-white text-xs font-bold mb-4 shadow-md">
+            <MapPin className="w-3.5 h-3.5" />
+            <span>Ordering for Table {tableNumber}</span>
+          </div>
+        ) : (
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#c86227]/20 border border-[#c86227]/40 text-xs font-medium text-[#f6be95] mb-4">
+            <Sparkles className="w-3.5 h-3.5 text-[#df9755]" />
+            <span>Freshly Roasted Daily • Single Origin</span>
+          </div>
+        )}
 
         {/* Main Headline */}
         <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-[#fbf8f5] leading-tight mb-4">
           Crafted With Passion, <br className="hidden sm:inline" />
-          <span className="text-[#df9755]">Served Fresh</span> To Your Table
+          <span className="text-[#df9755]">Served Fresh</span>{' '}
+          {hasTable ? `to Table ${tableNumber}` : 'to Your Table'}
         </h1>
 
         {/* Description */}
@@ -35,7 +46,7 @@ const HeroSection = () => {
           </div>
           <div className="flex items-center gap-2">
             <ShieldCheck className="w-4 h-4 text-[#df9755]" />
-            <span>No Account Needed</span>
+            <span>No Customer Login Required</span>
           </div>
         </div>
       </div>
@@ -44,4 +55,3 @@ const HeroSection = () => {
 };
 
 export default HeroSection;
-

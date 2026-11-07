@@ -1,20 +1,26 @@
 import React, { useState } from 'react';
 import { Plus, Check, Clock, AlertCircle } from 'lucide-react';
+import { useCart } from '../context/CartContext';
 
 const FALLBACK_IMAGE = 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=800&q=80';
 
-const MenuCard = ({ item, onAddToCart }) => {
+const MenuCard = ({ item }) => {
+  const { addToCart, getItemQuantity } = useCart();
   const [imageSrc, setImageSrc] = useState(item.image || FALLBACK_IMAGE);
   const [isAdded, setIsAdded] = useState(false);
 
+  const inCartQty = getItemQuantity(item._id);
+
   const handleAddToCartClick = () => {
     if (!item.isAvailable) return;
-    if (onAddToCart) onAddToCart(item);
+    const res = addToCart(item, 1);
 
-    setIsAdded(true);
-    setTimeout(() => {
-      setIsAdded(false);
-    }, 1200);
+    if (res.success) {
+      setIsAdded(true);
+      setTimeout(() => {
+        setIsAdded(false);
+      }, 1000);
+    }
   };
 
   return (
@@ -62,6 +68,12 @@ const MenuCard = ({ item, onAddToCart }) => {
               <Clock className="w-3.5 h-3.5 text-[#c86227]" />
               <span>{item.preparationTime || 5} mins</span>
             </span>
+
+            {inCartQty > 0 && (
+              <span className="text-[11px] font-semibold text-[#c86227] bg-[#f4ebe1] px-2 py-0.5 rounded-full border border-[#ebdccd]">
+                {inCartQty} in cart
+              </span>
+            )}
           </div>
 
           <h3 className="font-serif font-bold text-base sm:text-lg text-[#2e1c14] leading-snug group-hover:text-[#c86227] transition-colors line-clamp-1">
@@ -116,4 +128,3 @@ const MenuCard = ({ item, onAddToCart }) => {
 };
 
 export default MenuCard;
-
