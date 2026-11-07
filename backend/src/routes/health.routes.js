@@ -21,6 +21,7 @@ const getDatabaseStatus = () => {
  * /api/health:
  *   get:
  *     summary: System health check
+ *     tags: [Health]
  *     description: Returns operational status of the backend API and database connection
  *     responses:
  *       200:

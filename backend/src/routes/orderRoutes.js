@@ -181,14 +181,17 @@ router.route('/:id').get(validateOrderIdParam, getOrderById);
  * @openapi
  * /api/orders/{id}/status:
  *   patch:
- *     summary: Update order status
+ *     summary: Update order status (Admin Protected)
  *     tags: [Orders]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
  *         schema:
  *           type: string
+ *         description: MongoDB ObjectId of the order
  *     requestBody:
  *       required: true
  *       content:
@@ -201,14 +204,18 @@ router.route('/:id').get(validateOrderIdParam, getOrderById);
  *               orderStatus:
  *                 type: string
  *                 enum: [Pending, Preparing, Ready, Completed, Cancelled]
+ *                 example: Preparing
  *               paymentStatus:
  *                 type: string
  *                 enum: [Unpaid, Paid, Failed]
+ *                 example: Paid
  *     responses:
  *       200:
  *         description: Order status updated successfully
  *       400:
- *         description: Invalid status value
+ *         description: Invalid status value or ID format
+ *       401:
+ *         description: Unauthorized. Missing or invalid Bearer JWT.
  *       404:
  *         description: Order not found
  */

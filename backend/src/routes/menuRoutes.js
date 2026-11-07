@@ -103,8 +103,10 @@ const router = express.Router();
  *       200:
  *         description: List of menu items retrieved successfully
  *   post:
- *     summary: Create a new menu item
+ *     summary: Create a new menu item (Admin Protected)
  *     tags: [Menu]
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -118,25 +120,38 @@ const router = express.Router();
  *             properties:
  *               name:
  *                 type: string
+ *                 example: Vanilla Bean Flat White
  *               description:
  *                 type: string
+ *                 example: Rich espresso blended with real vanilla bean.
  *               price:
  *                 type: number
+ *                 example: 4.65
  *               category:
  *                 type: string
+ *                 example: hot coffee
  *               image:
  *                 type: string
+ *                 example: https://images.unsplash.com/photo-1577968897966-3d4325b36b61
  *               isAvailable:
  *                 type: boolean
+ *                 example: true
  *               preparationTime:
  *                 type: number
+ *                 example: 5
  *     responses:
  *       201:
  *         description: Menu item created successfully
  *       400:
- *         description: Validation error
+ *         description: Validation error (e.g. negative price, missing name)
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       401:
+ *         description: Unauthorized. Missing or invalid Bearer JWT.
  *       409:
- *         description: Menu item with this name already exists
+ *         description: Conflict. Menu item with this name already exists.
  */
 router
   .route('/')
@@ -162,14 +177,17 @@ router
  *       404:
  *         description: Menu item not found
  *   put:
- *     summary: Update an existing menu item
+ *     summary: Update an existing menu item (Admin Protected)
  *     tags: [Menu]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
  *         schema:
  *           type: string
+ *         description: MongoDB ObjectId of the menu item
  *     requestBody:
  *       required: true
  *       content:
@@ -194,20 +212,29 @@ router
  *     responses:
  *       200:
  *         description: Menu item updated successfully
+ *       400:
+ *         description: Validation error or invalid ID format
+ *       401:
+ *         description: Unauthorized. Missing or invalid Bearer JWT.
  *       404:
  *         description: Menu item not found
  *   delete:
- *     summary: Delete a menu item by ID
+ *     summary: Delete a menu item by ID (Admin Protected)
  *     tags: [Menu]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
  *         schema:
  *           type: string
+ *         description: MongoDB ObjectId of the menu item
  *     responses:
  *       200:
  *         description: Menu item deleted successfully
+ *       401:
+ *         description: Unauthorized. Missing or invalid Bearer JWT.
  *       404:
  *         description: Menu item not found
  */

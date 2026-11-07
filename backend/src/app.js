@@ -54,6 +54,10 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 // Swagger Documentation
 app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.get('/api/docs.json', (req, res) => {
+  res.setHeader('Content-Type', 'application/json');
+  res.send(swaggerSpec);
+});
 
 // Base and API routes
 app.use('/api/health', healthRoutes);
