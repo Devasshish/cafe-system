@@ -12,6 +12,7 @@ import {
   validateObjectIdParam,
   validateMenuQueryParams,
 } from '../middleware/menuValidator.js';
+import { verifyAdmin } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
@@ -140,7 +141,7 @@ const router = express.Router();
 router
   .route('/')
   .get(validateMenuQueryParams, getMenuItems)
-  .post(validateCreateMenuItem, createMenuItem);
+  .post(verifyAdmin, validateCreateMenuItem, createMenuItem);
 
 /**
  * @openapi
@@ -213,8 +214,8 @@ router
 router
   .route('/:id')
   .get(validateObjectIdParam, getMenuItemById)
-  .put(validateUpdateMenuItem, updateMenuItem)
-  .delete(validateObjectIdParam, deleteMenuItem);
+  .put(verifyAdmin, validateUpdateMenuItem, updateMenuItem)
+  .delete(verifyAdmin, validateObjectIdParam, deleteMenuItem);
 
 export default router;
 

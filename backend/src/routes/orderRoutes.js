@@ -11,6 +11,7 @@ import {
   validateOrderIdParam,
   validateOrderQueryParams,
 } from '../middleware/orderValidator.js';
+import { verifyAdmin } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
@@ -211,7 +212,7 @@ router.route('/:id').get(validateOrderIdParam, getOrderById);
  *       404:
  *         description: Order not found
  */
-router.route('/:id/status').patch(validateUpdateOrderStatus, updateOrderStatus);
+router.route('/:id/status').patch(verifyAdmin, validateUpdateOrderStatus, updateOrderStatus);
 
 export default router;
 
