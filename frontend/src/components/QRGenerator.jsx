@@ -235,3 +235,4 @@ const QRGenerator = () => {
 };
 
 export default QRGenerator;
+
