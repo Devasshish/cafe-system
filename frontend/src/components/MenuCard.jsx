@@ -79,7 +79,7 @@ const MenuCard = ({ item }) => {
             {item.name}
           </h3>
           <span className="font-sans font-bold text-base text-[#121212] flex-shrink-0">
-            ${Number(item.price).toFixed(2)}
+            ₹{Number(item.price).toFixed(2)}
           </span>
         </div>
 

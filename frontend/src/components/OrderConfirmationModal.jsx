@@ -68,7 +68,7 @@ const OrderConfirmationModal = ({ order, onClose }) => {
                   <span className="text-[#2e1c14] font-medium">{item.name}</span>
                 </div>
                 <span className="font-serif font-bold text-[#2e1c14]">
-                  ${(Number(item.price) * item.quantity).toFixed(2)}
+                  ₹{(Number(item.price) * item.quantity).toFixed(2)}
                 </span>
               </div>
             ))}
@@ -76,7 +76,7 @@ const OrderConfirmationModal = ({ order, onClose }) => {
 
           <div className="mt-3 pt-3 border-t border-[#ebdccd] flex items-center justify-between font-serif font-bold text-base text-[#2e1c14]">
             <span>Total Amount</span>
-            <span className="text-[#c86227] text-lg">${Number(order.totalAmount).toFixed(2)}</span>
+            <span className="text-[#c86227] text-lg">₹{Number(order.totalAmount).toFixed(2)}</span>
           </div>
         </div>
 

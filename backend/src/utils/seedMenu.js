@@ -133,7 +133,7 @@ async function seedDatabase() {
     console.log(`Successfully seeded ${createdItems.length} menu items.`);
 
     createdItems.forEach((item, index) => {
-      console.log(` [${index + 1}] ${item.name} - $${item.price.toFixed(2)} (${item.category})`);
+      console.log(` [${index + 1}] ${item.name} - ₹${item.price.toFixed(2)} (${item.category})`);
     });
 
     await mongoose.disconnect();

@@ -27,7 +27,7 @@ const CartItem = ({ item }) => {
           {item.name}
         </h4>
         <p className="text-xs text-[#8c6b53] mt-0.5">
-          ${Number(item.price).toFixed(2)} each
+          ₹{Number(item.price).toFixed(2)} each
         </p>
 
         {/* Quantity Controls on Mobile */}
@@ -52,7 +52,7 @@ const CartItem = ({ item }) => {
             </button>
           </div>
           <span className="font-serif font-bold text-sm text-[#2e1c14]">
-            ${lineTotal}
+            ₹{lineTotal}
           </span>
         </div>
       </div>
@@ -81,7 +81,7 @@ const CartItem = ({ item }) => {
 
         <div className="w-20 text-right">
           <span className="font-serif font-bold text-base text-[#2e1c14] block">
-            ${lineTotal}
+            ₹{lineTotal}
           </span>
         </div>
 

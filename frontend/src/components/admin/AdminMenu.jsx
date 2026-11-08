@@ -234,7 +234,7 @@ const AdminMenu = () => {
                   </td>
                   <td className="py-3 capitalize text-[#4a3325]">{item.category}</td>
                   <td className="py-3 font-serif font-bold text-sm text-[#2e1c14]">
-                    ${Number(item.price).toFixed(2)}
+                    ₹{Number(item.price).toFixed(2)}
                   </td>
                   <td className="py-3 text-[#6e5444]">{item.preparationTime || 5} mins</td>
                   <td className="py-3">
@@ -316,7 +316,7 @@ const AdminMenu = () => {
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block font-semibold text-[#4a3325] mb-1">Price ($) *</label>
+                  <label className="block font-semibold text-[#4a3325] mb-1">Price (₹) *</label>
                   <input
                     type="number"
                     step="0.01"

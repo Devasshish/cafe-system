@@ -292,15 +292,15 @@ const CartPage = () => {
               <div className="pt-4 border-t border-[#f4ebe1] space-y-2 text-xs sm:text-sm">
                 <div className="flex justify-between text-[#6e5444]">
                   <span>Items Subtotal</span>
-                  <span className="font-semibold text-[#2e1c14]">${subtotal.toFixed(2)}</span>
+                  <span className="font-semibold text-[#2e1c14]">₹{subtotal.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between text-[#6e5444]">
                   <span>Estimated Tax</span>
-                  <span className="font-semibold text-[#2e1c14]">$0.00</span>
+                  <span className="font-semibold text-[#2e1c14]">₹0.00</span>
                 </div>
                 <div className="flex justify-between font-serif font-bold text-base sm:text-lg text-[#2e1c14] pt-2 border-t border-[#ebdccd]">
                   <span>Order Total</span>
-                  <span className="text-[#c86227]">${totalAmount.toFixed(2)}</span>
+                  <span className="text-[#c86227]">₹{totalAmount.toFixed(2)}</span>
                 </div>
               </div>
 
@@ -318,7 +318,7 @@ const CartPage = () => {
                 ) : (
                   <>
                     <CheckCircle2 className="w-4 h-4" />
-                    <span>Place Order (${totalAmount.toFixed(2)})</span>
+                    <span>Place Order (₹{totalAmount.toFixed(2)})</span>
                   </>
                 )}
               </button>

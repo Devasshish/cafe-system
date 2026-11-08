@@ -150,7 +150,7 @@ const AdminOrders = () => {
                     ))}
                   </td>
                   <td className="py-3 font-serif font-bold text-sm text-[#2e1c14]">
-                    ${Number(order.totalAmount).toFixed(2)}
+                    ₹{Number(order.totalAmount).toFixed(2)}
                   </td>
                   <td className="py-3">
                     <select
@@ -242,11 +242,11 @@ const AdminOrders = () => {
                     <span className="font-bold text-[#c86227] mr-1.5">{item.quantity}×</span>
                     <span className="font-medium text-[#2e1c14]">{item.name}</span>
                     <span className="text-[10px] text-[#8c6b53] block">
-                      ${Number(item.price).toFixed(2)} each
+                      ₹{Number(item.price).toFixed(2)} each
                     </span>
                   </div>
                   <span className="font-serif font-bold text-[#2e1c14]">
-                    ${(Number(item.price) * item.quantity).toFixed(2)}
+                    ₹{(Number(item.price) * item.quantity).toFixed(2)}
                   </span>
                 </div>
               ))}
@@ -255,7 +255,7 @@ const AdminOrders = () => {
             <div className="pt-3 border-t border-[#f4ebe1] flex justify-between items-center font-serif font-bold text-base mb-6">
               <span>Total Amount</span>
               <span className="text-[#c86227] text-lg">
-                ${Number(selectedOrder.totalAmount).toFixed(2)}
+                ₹{Number(selectedOrder.totalAmount).toFixed(2)}
               </span>
             </div>
 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import api from '../../services/api';
 import {
-  DollarSign,
+  IndianRupee,
   ShoppingBag,
   Clock,
   CheckCircle2,
@@ -61,8 +61,8 @@ const AdminOverview = ({ onNavigateTab }) => {
   const kpis = [
     {
       title: 'Total Revenue',
-      value: `$${Number(stats?.totalSales || 0).toFixed(2)}`,
-      icon: DollarSign,
+      value: `₹${Number(stats?.totalSales || 0).toFixed(2)}`,
+      icon: IndianRupee || DollarSign,
       color: 'text-emerald-700',
       bg: 'bg-emerald-50 border-emerald-200',
       description: 'Calculated from stored orders',
@@ -172,7 +172,7 @@ const AdminOverview = ({ onNavigateTab }) => {
                         {order.items?.length || 0} items
                       </td>
                       <td className="py-3 font-serif font-bold text-[#2e1c14]">
-                        ${Number(order.totalAmount).toFixed(2)}
+                        ₹{Number(order.totalAmount).toFixed(2)}
                       </td>
                       <td className="py-3">
                         <span
