@@ -6,7 +6,7 @@ import SortDropdown from '../components/SortDropdown';
 import MenuGrid from '../components/MenuGrid';
 import LoadingSkeleton from '../components/LoadingSkeleton';
 import api from '../services/api';
-import { AlertCircle, RefreshCw, Sparkles, LayoutGrid, List } from 'lucide-react';
+import { AlertCircle, RefreshCw, Sparkles, LayoutGrid, List, X } from 'lucide-react';
 
 const HomePage = () => {
   const [menuItems, setMenuItems] = useState([]);
@@ -109,29 +109,35 @@ const HomePage = () => {
             onSelectCategory={setActiveCategory}
           />
 
-          {/* Quick Search & Sort Bar */}
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-2">
-            <div className="max-w-md w-full">
+          {/* Quick Search & Sort Bar (Optimized for Mobile & Desktop) */}
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 sm:gap-3 pt-2">
+            {/* Search Input */}
+            <div className="w-full sm:max-w-md">
               <SearchBar
                 searchTerm={searchTerm}
                 onSearchChange={setSearchTerm}
                 onClear={() => setSearchTerm('')}
               />
             </div>
-            <div className="flex items-center justify-between sm:justify-end gap-3 flex-wrap">
+
+            {/* Filter Controls: Sort Dropdown & Grid/List View Toggle */}
+            <div className="flex items-center justify-between sm:justify-end gap-2 sm:gap-3 w-full sm:w-auto">
               {!loading && !error && (
-                <span className="text-xs font-medium text-[#777] hidden md:inline">
-                  Showing {menuItems.length} {menuItems.length === 1 ? 'item' : 'items'}
+                <span className="text-xs font-semibold text-[#8C6B53] hidden lg:inline">
+                  {menuItems.length} {menuItems.length === 1 ? 'brew' : 'brews'}
                 </span>
               )}
 
+              {/* Sort Dropdown */}
+              <SortDropdown activeSort={activeSort} onSortChange={setActiveSort} />
+
               {/* View Layout Switcher (Artisan Cards vs Clean List) */}
-              <div className="inline-flex items-center p-1 rounded-xl bg-white border border-[#EBDDCC] shadow-xs">
+              <div className="inline-flex items-center p-1 rounded-xl bg-white border border-[#EBDDCC] shadow-xs flex-shrink-0">
                 <button
                   type="button"
                   onClick={() => setViewMode('grid')}
                   title="Card Grid View"
-                  className={`p-1.5 rounded-lg transition-all cursor-pointer ${
+                  className={`p-1.5 sm:p-2 rounded-lg transition-all cursor-pointer ${
                     viewMode === 'grid'
                       ? 'bg-[#B23B14] text-white shadow-xs'
                       : 'text-[#7D5F4C] hover:text-[#331B0F] hover:bg-[#FAF6F0]'
@@ -143,7 +149,7 @@ const HomePage = () => {
                   type="button"
                   onClick={() => setViewMode('list')}
                   title="Compact List View"
-                  className={`p-1.5 rounded-lg transition-all cursor-pointer ${
+                  className={`p-1.5 sm:p-2 rounded-lg transition-all cursor-pointer ${
                     viewMode === 'list'
                       ? 'bg-[#B23B14] text-white shadow-xs'
                       : 'text-[#7D5F4C] hover:text-[#331B0F] hover:bg-[#FAF6F0]'
@@ -152,10 +158,43 @@ const HomePage = () => {
                   <List className="w-4 h-4" />
                 </button>
               </div>
-
-              <SortDropdown activeSort={activeSort} onSortChange={setActiveSort} />
             </div>
           </div>
+
+          {/* Active Filter Indicators on Mobile & Desktop */}
+          {(activeCategory || debouncedSearch) && (
+            <div className="flex items-center gap-2 pt-1 flex-wrap text-xs animate-in fade-in duration-200">
+              <span className="text-[11px] font-bold uppercase tracking-wider text-[#8C6B53]">
+                Filtering:
+              </span>
+              {activeCategory && (
+                <button
+                  onClick={() => setActiveCategory('')}
+                  className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#B23B14]/10 text-[#B23B14] font-bold hover:bg-[#B23B14]/20 transition cursor-pointer"
+                  title="Remove category filter"
+                >
+                  <span className="capitalize">{activeCategory}</span>
+                  <X className="w-3 h-3" />
+                </button>
+              )}
+              {debouncedSearch && (
+                <button
+                  onClick={() => setSearchTerm('')}
+                  className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#B23B14]/10 text-[#B23B14] font-bold hover:bg-[#B23B14]/20 transition cursor-pointer"
+                  title="Clear search term"
+                >
+                  <span>"{debouncedSearch}"</span>
+                  <X className="w-3 h-3" />
+                </button>
+              )}
+              <button
+                onClick={handleResetFilters}
+                className="text-[11px] text-[#8C6B53] hover:text-[#B23B14] underline font-bold ml-1 cursor-pointer"
+              >
+                Reset all
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Content Area: Loading / Error / Grid */}

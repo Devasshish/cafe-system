@@ -59,94 +59,145 @@ const Navbar = () => {
     <>
       {/* Seamless, Borderless Modern Navbar with Warm Cream Canvas */}
       <header className="sticky top-0 z-50 bg-[#F6EFE5]/95 backdrop-blur-md">
-        <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 h-20 sm:h-24 flex items-center justify-between">
-          {/* Brand Logo & Clean Typography - Prominent & Big */}
-          <Link
-            to={tableNumber ? `/?table=${tableNumber}` : '/'}
-            className="flex items-center gap-3 sm:gap-3.5 group"
-          >
-            <div className="relative">
-              <img
-                src="/logo.png"
-                alt="Recharge Café"
-                className="w-13 h-13 sm:w-16 sm:h-16 md:w-18 md:h-18 rounded-full object-cover ring-2 ring-[#EBDDCC] shadow-md transition-transform duration-300 group-hover:scale-105"
-              />
-            </div>
-            <div className="flex flex-col">
-              <span className="font-sans font-extrabold text-2xl sm:text-3xl text-[#331B0F] tracking-tight leading-none group-hover:text-[#B23B14] transition-colors">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
+          {/* ========================================================= */}
+          {/* MOBILE VIEW (< md): Name Left, Logo Center, Tray Right */}
+          {/* ========================================================= */}
+          <div className="md:hidden h-18 sm:h-20 flex items-center justify-between relative">
+            {/* Left: Brand Name */}
+            <Link
+              to={tableNumber ? `/?table=${tableNumber}` : '/'}
+              className="flex flex-col z-10"
+            >
+              <span className="font-sans font-extrabold text-xl text-[#331B0F] tracking-tight leading-tight hover:text-[#B23B14] transition-colors">
                 recharge
               </span>
-              <span className="text-[10px] sm:text-xs font-semibold text-[#7D5F4C] tracking-widest uppercase mt-0.5 font-sans">
+              <span className="text-[9px] font-semibold text-[#7D5F4C] tracking-widest uppercase font-sans">
                 Café & Eatery
               </span>
-            </div>
-          </Link>
-
-          {/* Right Aligned Navigation Group */}
-          <div className="flex items-center gap-4 sm:gap-6 lg:gap-8">
-            <nav className="hidden md:flex items-center gap-6 lg:gap-8 text-sm font-semibold text-[#331B0F] font-sans">
-              <a
-                href="#menu-section"
-                onClick={handleScrollToMenu}
-                className="hover:text-[#B23B14] transition-colors"
-              >
-                Menu
-              </a>
-              <Link
-                to="/notes"
-                className={`hover:text-[#B23B14] transition-colors ${
-                  location.pathname.startsWith('/notes') ? 'text-[#B23B14]' : ''
-                }`}
-              >
-                Notes
-              </Link>
-              <Link
-                to="/reviews"
-                className={`hover:text-[#B23B14] transition-colors ${
-                  location.pathname.startsWith('/reviews') || location.pathname.startsWith('/feedback')
-                    ? 'text-[#B23B14]'
-                    : ''
-                }`}
-              >
-                Reviews
-              </Link>
-            </nav>
-
-            {/* Table Number Badge */}
-            <button
-              onClick={handleOpenTableModal}
-              type="button"
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold transition-all border ${
-                hasTable
-                  ? 'bg-[#F8DED2] text-[#B23B14] border-[#f0c8b6] shadow-xs'
-                  : 'bg-white/80 text-[#7D5F4C] border-[#EBDDCC] hover:border-[#B23B14]/40 hover:bg-white'
-              }`}
-              title="Click to view or set dine-in table number"
-            >
-              <MapPin className="w-3.5 h-3.5 text-[#B23B14]" />
-              <span className="hidden sm:inline">
-                {hasTable ? `Table ${tableNumber}` : 'Set Table'}
-              </span>
-              <span className="sm:hidden font-mono">
-                {hasTable ? tableNumber : '#'}
-              </span>
-            </button>
-
-            {/* Primary Terracotta Pill Button: Coffee Tray (Replaces 'Order Brew' with Tray) */}
-            <Link
-              to="/cart"
-              className="relative inline-flex items-center gap-2 px-4 sm:px-6 py-2.5 rounded-full bg-[#B23B14] hover:bg-[#962E0B] text-white text-xs sm:text-sm font-bold tracking-wide transition-all shadow-sm hover:shadow-md active:scale-95 cursor-pointer font-sans whitespace-nowrap group"
-              aria-label={`My Coffee Tray, ${totalCount} items`}
-              title="View Coffee Tray"
-            >
-              <ShoppingBag className="w-4 h-4 stroke-[2.2] group-hover:scale-110 transition-transform" />
-              <span>Tray</span>
-              {totalCount > 0 && (
-                <span className="min-w-[20px] h-[20px] px-1.5 rounded-full bg-white text-[#B23B14] text-[11px] font-black leading-none flex items-center justify-center shadow-xs">
-                  {totalCount}
-                </span>
-              )}
             </Link>
+
+            {/* Center: Brand Logo Image (Mathematically Centered) */}
+            <Link
+              to={tableNumber ? `/?table=${tableNumber}` : '/'}
+              className="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 z-10"
+              aria-label="Recharge Café Home"
+            >
+              <img
+                src="/logo.png"
+                alt="Recharge Café Logo"
+                className="w-11 h-11 rounded-full object-cover ring-2 ring-[#EBDDCC] shadow-md active:scale-95 transition-transform"
+              />
+            </Link>
+
+            {/* Right: Just the Tray Button */}
+            <div className="flex items-center justify-end z-10">
+              <Link
+                to="/cart"
+                className="relative inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-[#B23B14] active:bg-[#962E0B] text-white text-xs font-bold tracking-wide transition-all shadow-sm active:scale-95 cursor-pointer font-sans whitespace-nowrap group"
+                aria-label={`My Coffee Tray, ${totalCount} items`}
+                title="View Coffee Tray"
+              >
+                <ShoppingBag className="w-3.5 h-3.5 stroke-[2.2] group-hover:scale-110 transition-transform" />
+                <span>Tray</span>
+                {totalCount > 0 && (
+                  <span className="min-w-[18px] h-[18px] px-1 rounded-full bg-white text-[#B23B14] text-[10px] font-black leading-none flex items-center justify-center shadow-xs">
+                    {totalCount}
+                  </span>
+                )}
+              </Link>
+            </div>
+          </div>
+
+          {/* ========================================================= */}
+          {/* DESKTOP VIEW (>= md): Logo + Name on Left, Nav + Table + Tray on Right */}
+          {/* ========================================================= */}
+          <div className="hidden md:flex h-20 sm:h-24 items-center justify-between">
+            {/* Brand Logo & Clean Typography */}
+            <Link
+              to={tableNumber ? `/?table=${tableNumber}` : '/'}
+              className="flex items-center gap-3 sm:gap-3.5 group"
+            >
+              <div className="relative">
+                <img
+                  src="/logo.png"
+                  alt="Recharge Café"
+                  className="w-13 h-13 sm:w-16 sm:h-16 md:w-18 md:h-18 rounded-full object-cover ring-2 ring-[#EBDDCC] shadow-md transition-transform duration-300 group-hover:scale-105"
+                />
+              </div>
+              <div className="flex flex-col">
+                <span className="font-sans font-extrabold text-2xl sm:text-3xl text-[#331B0F] tracking-tight leading-none group-hover:text-[#B23B14] transition-colors">
+                  recharge
+                </span>
+                <span className="text-[10px] sm:text-xs font-semibold text-[#7D5F4C] tracking-widest uppercase mt-0.5 font-sans">
+                  Café & Eatery
+                </span>
+              </div>
+            </Link>
+
+            {/* Right Aligned Navigation Group */}
+            <div className="flex items-center gap-4 sm:gap-6 lg:gap-8">
+              <nav className="flex items-center gap-6 lg:gap-8 text-sm font-semibold text-[#331B0F] font-sans">
+                <a
+                  href="#menu-section"
+                  onClick={handleScrollToMenu}
+                  className="hover:text-[#B23B14] transition-colors"
+                >
+                  Menu
+                </a>
+                <Link
+                  to="/notes"
+                  className={`hover:text-[#B23B14] transition-colors ${
+                    location.pathname.startsWith('/notes') ? 'text-[#B23B14]' : ''
+                  }`}
+                >
+                  Notes
+                </Link>
+                <Link
+                  to="/reviews"
+                  className={`hover:text-[#B23B14] transition-colors ${
+                    location.pathname.startsWith('/reviews') || location.pathname.startsWith('/feedback')
+                      ? 'text-[#B23B14]'
+                      : ''
+                  }`}
+                >
+                  Reviews
+                </Link>
+              </nav>
+
+              {/* Table Number Badge */}
+              <button
+                onClick={handleOpenTableModal}
+                type="button"
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold transition-all border ${
+                  hasTable
+                    ? 'bg-[#F8DED2] text-[#B23B14] border-[#f0c8b6] shadow-xs'
+                    : 'bg-white/80 text-[#7D5F4C] border-[#EBDDCC] hover:border-[#B23B14]/40 hover:bg-white'
+                }`}
+                title="Click to view or set dine-in table number"
+              >
+                <MapPin className="w-3.5 h-3.5 text-[#B23B14]" />
+                <span>
+                  {hasTable ? `Table ${tableNumber}` : 'Set Table'}
+                </span>
+              </button>
+
+              {/* Primary Terracotta Pill Button: Coffee Tray */}
+              <Link
+                to="/cart"
+                className="relative inline-flex items-center gap-2 px-4 sm:px-6 py-2.5 rounded-full bg-[#B23B14] hover:bg-[#962E0B] text-white text-xs sm:text-sm font-bold tracking-wide transition-all shadow-sm hover:shadow-md active:scale-95 cursor-pointer font-sans whitespace-nowrap group"
+                aria-label={`My Coffee Tray, ${totalCount} items`}
+                title="View Coffee Tray"
+              >
+                <ShoppingBag className="w-4 h-4 stroke-[2.2] group-hover:scale-110 transition-transform" />
+                <span>Tray</span>
+                {totalCount > 0 && (
+                  <span className="min-w-[20px] h-[20px] px-1.5 rounded-full bg-white text-[#B23B14] text-[11px] font-black leading-none flex items-center justify-center shadow-xs">
+                    {totalCount}
+                  </span>
+                )}
+              </Link>
+            </div>
           </div>
         </div>
       </header>
