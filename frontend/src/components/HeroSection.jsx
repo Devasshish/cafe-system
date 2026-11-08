@@ -67,9 +67,9 @@ const HeroSection = () => {
 
       {/* Main Hero Content Layout */}
       <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center text-center">
-        {/* Table indicator pill badge if scanned */}
+        {/* Table indicator pill badge if scanned (hidden on mobile screen as requested) */}
         {hasTable && (
-          <div className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-[#B23B14] text-white text-xs font-bold mb-1 shadow-md animate-bounce z-20">
+          <div className="hidden sm:inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-[#B23B14] text-white text-xs font-bold mb-1 shadow-md animate-bounce z-20">
             <MapPin className="w-3.5 h-3.5" />
             <span>Ordering for Table {tableNumber}</span>
           </div>

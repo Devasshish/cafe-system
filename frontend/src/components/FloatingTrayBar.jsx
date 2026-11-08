@@ -16,20 +16,20 @@ const FloatingTrayBar = () => {
     <div className="fixed bottom-4 sm:bottom-6 inset-x-0 z-40 px-4 pointer-events-none animate-slide-up">
       <div className="max-w-xl mx-auto bg-[#331B0F] text-[#FAF6F0] rounded-2xl p-3 sm:p-3.5 shadow-[0_16px_36px_rgba(51,27,15,0.35)] border border-[#4A2817] flex items-center justify-between pointer-events-auto backdrop-blur-md">
         {/* Tray Summary */}
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-[#B23B14] flex items-center justify-center text-white shadow-md flex-shrink-0">
-            <ShoppingBag className="w-5 h-5 stroke-[2.2]" />
+        <div className="flex items-center gap-2.5 sm:gap-3 min-w-0 flex-1 pr-2">
+          <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-[#B23B14] flex items-center justify-center text-white shadow-md flex-shrink-0">
+            <ShoppingBag className="w-4 h-4 sm:w-5 sm:h-5 stroke-[2.2]" />
           </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="font-sans font-black text-xs sm:text-sm text-white">
-                {totalCount} {totalCount === 1 ? 'item' : 'items'} in Tray
+          <div className="min-w-0">
+            <div className="flex items-center gap-1.5 leading-none">
+              <span className="font-sans font-black text-xs sm:text-sm text-white whitespace-nowrap">
+                {totalCount} {totalCount === 1 ? 'item' : 'items'}
               </span>
-              <span className="text-xs sm:text-sm font-serif font-black text-[#F8DED2]">
-                ₹{Number(totalAmount).toFixed(2)}
+              <span className="text-xs sm:text-sm font-serif font-black text-[#F8DED2] whitespace-nowrap">
+                • ₹{Number(totalAmount).toFixed(2)}
               </span>
             </div>
-            <p className="text-[10px] sm:text-[11px] text-[#CBB7A2]">
+            <p className="text-[10px] sm:text-[11px] text-[#CBB7A2] truncate mt-1">
               Ready to brew for your table
             </p>
           </div>

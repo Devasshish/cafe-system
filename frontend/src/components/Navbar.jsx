@@ -58,40 +58,42 @@ const Navbar = () => {
   return (
     <>
       {/* Seamless, Borderless Modern Navbar with Warm Cream Canvas */}
-      <header className="sticky top-0 z-50 bg-[#F6EFE5]/95 backdrop-blur-md">
+      <header className="sticky top-0 z-50 bg-[#F6EFE5]/95 backdrop-blur-md pt-2.5 sm:pt-3 pb-2 sm:pb-2.5 border-b border-[#EBDDCC]/40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
           {/* ========================================================= */}
-          {/* MOBILE VIEW (< md): Name Left, Logo Center, Tray Right */}
+          {/* MOBILE VIEW (< md): In-flow 3-column layout (Left: Name, Center: Logo, Right: Tray) */}
           {/* ========================================================= */}
-          <div className="md:hidden h-22 sm:h-24 flex items-center justify-between relative">
+          <div className="md:hidden flex items-center justify-between gap-2">
             {/* Left: Brand Name */}
             <Link
               to={tableNumber ? `/?table=${tableNumber}` : '/'}
-              className="flex flex-col z-10 max-w-[110px]"
+              className="flex flex-col z-10 flex-1 min-w-0"
             >
-              <span className="font-sans font-extrabold text-xl sm:text-2xl text-[#331B0F] tracking-tight leading-tight hover:text-[#B23B14] transition-colors">
+              <span className="font-sans font-extrabold text-lg sm:text-xl text-[#331B0F] tracking-tight leading-tight hover:text-[#B23B14] transition-colors truncate">
                 recharge
               </span>
-              <span className="text-[9px] sm:text-[10px] font-semibold text-[#7D5F4C] tracking-widest uppercase font-sans">
+              <span className="text-[9px] font-semibold text-[#7D5F4C] tracking-widest uppercase font-sans truncate">
                 Café & Eatery
               </span>
             </Link>
 
-            {/* Center: Brand Logo Image (Prominent Bold Size & Mathematically Centered) */}
-            <Link
-              to={tableNumber ? `/?table=${tableNumber}` : '/'}
-              className="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 z-10"
-              aria-label="Recharge Café Home"
-            >
-              <img
-                src="/logo.png"
-                alt="Recharge Café Logo"
-                className="w-[68px] h-[68px] sm:w-[80px] sm:h-[80px] rounded-full object-cover ring-3 ring-[#EBDDCC] shadow-xl active:scale-95 transition-transform"
-              />
-            </Link>
+            {/* Center: In-flow Logo (Guaranteed safe margins above & below, zero clipping) */}
+            <div className="flex items-center justify-center flex-shrink-0 z-10 px-1">
+              <Link
+                to={tableNumber ? `/?table=${tableNumber}` : '/'}
+                aria-label="Recharge Café Home"
+                className="block"
+              >
+                <img
+                  src="/logo.png"
+                  alt="Recharge Café Logo"
+                  className="w-16 h-16 sm:w-18 sm:h-18 rounded-full object-cover ring-2 ring-[#EBDDCC] shadow-md active:scale-95 transition-transform"
+                />
+              </Link>
+            </div>
 
             {/* Right: Just the Tray Button */}
-            <div className="flex items-center justify-end z-10">
+            <div className="flex items-center justify-end z-10 flex-1 min-w-0">
               <Link
                 to="/cart"
                 className="relative inline-flex items-center gap-1.5 px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-full bg-[#B23B14] active:bg-[#962E0B] text-white text-xs sm:text-sm font-bold tracking-wide transition-all shadow-sm active:scale-95 cursor-pointer font-sans whitespace-nowrap group"
