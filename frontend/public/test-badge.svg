@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <path d="M 174.00 100.00 A 23.02 23.02 0 0 1 165.52 134.39 A 23.02 23.02 0 0 1 142.04 160.90 A 23.02 23.02 0 0 1 108.92 173.46 A 23.02 23.02 0 0 1 73.76 169.19 A 23.02 23.02 0 0 1 44.61 149.07 A 23.02 23.02 0 0 1 28.15 117.71 A 23.02 23.02 0 0 1 28.15 82.29 A 23.02 23.02 0 0 1 44.61 50.93 A 23.02 23.02 0 0 1 73.76 30.81 A 23.02 23.02 0 0 1 108.92 26.54 A 23.02 23.02 0 0 1 142.04 39.10 A 23.02 23.02 0 0 1 165.52 65.61 A 23.02 23.02 0 0 1 174.00 100.00 Z" fill="#B23B14" />
+  <g transform="rotate(-12 100 100)" text-anchor="middle" fill="#FFFFFF" font-family="'Fredoka', 'Nunito', 'Arial Rounded MT Bold', -apple-system, sans-serif" font-weight="900">
+    <text x="100" y="92" font-size="32" letter-spacing="-1" stroke="#FFFFFF" stroke-width="1.5" paint-order="stroke fill">Order</text>
+    <text x="100" y="128" font-size="32" letter-spacing="-1" stroke="#FFFFFF" stroke-width="1.5" paint-order="stroke fill">now</text>
+  </g>
+</svg>

@@ -1,20 +1,20 @@
 import React from 'react';
-import { Coffee, Snowflake, Flame, Cake, Cookie, Sparkles } from 'lucide-react';
 
 const CATEGORIES = [
-  { id: '', label: 'All Items', icon: Sparkles },
-  { id: 'hot coffee', label: 'Hot Coffee', icon: Flame },
-  { id: 'cold coffee', label: 'Cold Coffee', icon: Snowflake },
-  { id: 'tea', label: 'Tea & Infusions', icon: Coffee },
-  { id: 'bakery', label: 'Artisan Bakery', icon: Cookie },
-  { id: 'desserts', label: 'Desserts', icon: Cake },
+  { id: '', label: 'All Coffee' },
+  { id: 'cappuccino', label: 'Cappuccino' },
+  { id: 'latte', label: 'Latte' },
+  { id: 'mocha', label: 'Mocha' },
+  { id: 'frappuccino', label: 'Frappuccino' },
+  { id: 'cold coffee', label: 'Cold Coffee' },
+  { id: 'hot coffee', label: 'Hot Coffee' },
+  { id: 'flat white', label: 'Flat White' },
 ];
 
 const CategoryFilter = ({ activeCategory, onSelectCategory }) => {
   return (
-    <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none scroll-smooth">
+    <div className="flex items-center justify-start sm:justify-center gap-2.5 overflow-x-auto py-2 px-1 scrollbar-none scroll-smooth">
       {CATEGORIES.map((cat) => {
-        const Icon = cat.icon;
         const isActive = activeCategory === cat.id;
 
         return (
@@ -22,14 +22,13 @@ const CategoryFilter = ({ activeCategory, onSelectCategory }) => {
             key={cat.id || 'all'}
             onClick={() => onSelectCategory(cat.id)}
             type="button"
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-full text-xs sm:text-sm font-medium whitespace-nowrap transition-all duration-200 shadow-sm ${
+            className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-medium whitespace-nowrap transition-all duration-200 cursor-pointer ${
               isActive
-                ? 'bg-[#c86227] text-white shadow-[#c86227]/25 shadow-md scale-102'
-                : 'bg-white text-[#4a3325] border border-[#e5d5c5] hover:border-[#c86227]/50 hover:bg-[#faf4ee]'
+                ? 'bg-[#121212] text-white shadow-md'
+                : 'bg-[#f2f2f2] text-[#3a3a3a] hover:bg-[#e5e5e5] hover:text-[#121212]'
             }`}
           >
-            <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-white' : 'text-[#c86227]'}`} />
-            <span>{cat.label}</span>
+            {cat.label}
           </button>
         );
       })}
@@ -38,4 +37,3 @@ const CategoryFilter = ({ activeCategory, onSelectCategory }) => {
 };
 
 export default CategoryFilter;
-

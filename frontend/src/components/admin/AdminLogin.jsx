@@ -31,10 +31,14 @@ const AdminLogin = () => {
       <div className="bg-white rounded-3xl border border-[#ebdccd] shadow-xl p-8 text-[#2e1c14]">
         {/* Header Branding */}
         <div className="text-center mb-8">
-          <div className="w-14 h-14 rounded-full bg-[#c86227]/10 flex items-center justify-center text-[#c86227] mx-auto mb-3 shadow-sm">
-            <Coffee className="w-7 h-7" />
-          </div>
-          <h2 className="font-serif font-bold text-2xl text-[#2e1c14]">Admin Portal</h2>
+          <img
+            src="/logo.png"
+            alt="Recharge Café"
+            className="w-16 h-16 rounded-full mx-auto mb-3 border-2 border-[#e5d5c5] shadow-sm"
+          />
+          <h2 className="font-serif font-bold text-2xl text-[#2e1c14]">
+            <span className="text-[#3e2318]">Recharge</span> <span className="text-[#f26522]">Café</span>
+          </h2>
           <p className="text-xs text-[#7d5f4c] mt-1">
             Sign in to access order management and menu controls.
           </p>

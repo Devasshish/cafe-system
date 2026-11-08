@@ -36,12 +36,12 @@ const AdminPage = () => {
   ];
 
   return (
-    <div className="min-h-[80vh] flex flex-col md:flex-row gap-6 items-start">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 min-h-[80vh] flex flex-col md:flex-row gap-6 items-start">
       {/* Mobile Sidebar Toggle Header */}
       <div className="w-full md:hidden flex items-center justify-between p-4 bg-white rounded-2xl border border-[#ebdccd]">
         <div className="flex items-center gap-2">
-          <Coffee className="w-5 h-5 text-[#c86227]" />
-          <span className="font-serif font-bold text-sm text-[#2e1c14]">Admin Dashboard</span>
+          <img src="/logo.png" alt="Recharge Café" className="w-6 h-6 rounded-full" />
+          <span className="font-serif font-bold text-sm text-[#2e1c14]">Recharge Café Admin</span>
         </div>
         <button
           onClick={() => setIsMobileNavOpen(!isMobileNavOpen)}
@@ -59,6 +59,12 @@ const AdminPage = () => {
       >
         {/* User Info */}
         <div className="border-b border-[#f4ebe1] pb-4">
+          <div className="flex items-center gap-2 mb-3">
+            <img src="/logo.png" alt="Recharge Café" className="w-8 h-8 rounded-full border border-[#ebdccd]" />
+            <span className="font-serif font-bold text-sm text-[#2e1c14]">
+              Recharge Café
+            </span>
+          </div>
           <span className="text-[10px] uppercase tracking-wider text-[#8c6b53] font-bold block">
             Logged In As
           </span>

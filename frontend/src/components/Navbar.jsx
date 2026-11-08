@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { Coffee, ShoppingBag, MapPin, QrCode, X, Check } from 'lucide-react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { ShoppingBag, MapPin, X } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { useTable } from '../context/TableContext';
 
@@ -8,6 +8,7 @@ const Navbar = () => {
   const { totalCount } = useCart();
   const { tableNumber, setTableNumber, hasTable } = useTable();
   const location = useLocation();
+  const navigate = useNavigate();
 
   const [isEditingTable, setIsEditingTable] = useState(false);
   const [tempTableInput, setTempTableInput] = useState('');
@@ -25,96 +26,129 @@ const Navbar = () => {
     }
   };
 
+  const handleScrollToMenu = (e) => {
+    e.preventDefault();
+    if (location.pathname === '/') {
+      const el = document.getElementById('menu-section');
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth' });
+      }
+    } else {
+      navigate('/#menu-section');
+    }
+  };
+
   return (
     <>
-      <header className="sticky top-0 z-40 bg-[#fcfaf7]/95 backdrop-blur-md border-b border-[#ebdccd]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-          {/* Brand Logo & Name */}
-          <Link to={tableNumber ? `/?table=${tableNumber}` : '/'} className="flex items-center gap-3 group">
-            <div className="w-11 h-11 rounded-full bg-[#c86227]/10 flex items-center justify-center text-[#c86227] group-hover:bg-[#c86227] group-hover:text-white transition-all duration-300 shadow-sm">
-              <Coffee className="w-6 h-6 transition-transform group-hover:scale-110" />
+      {/* Seamless, Borderless Modern Navbar with Warm Cream Canvas */}
+      <header className="sticky top-0 z-50 bg-[#F6EFE5]/95 backdrop-blur-md">
+        <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 h-20 sm:h-24 flex items-center justify-between">
+          {/* Brand Logo & Clean Typography - Prominent & Big */}
+          <Link
+            to={tableNumber ? `/?table=${tableNumber}` : '/'}
+            className="flex items-center gap-3 sm:gap-3.5 group"
+          >
+            <div className="relative">
+              <img
+                src="/logo.png"
+                alt="Recharge Café"
+                className="w-13 h-13 sm:w-16 sm:h-16 md:w-18 md:h-18 rounded-full object-cover ring-2 ring-[#EBDDCC] shadow-md transition-transform duration-300 group-hover:scale-105"
+              />
             </div>
-            <div>
-              <span className="font-serif font-bold text-xl sm:text-2xl text-[#2e1c14] tracking-tight block">
-                Cafe Royale
+            <div className="flex flex-col">
+              <span className="font-sans font-extrabold text-2xl sm:text-3xl text-[#331B0F] tracking-tight leading-none group-hover:text-[#B23B14] transition-colors">
+                recharge
               </span>
-              <span className="text-[10px] uppercase tracking-widest text-[#8c6b53] font-medium block">
-                Artisan Coffee & Bakery
+              <span className="text-[10px] sm:text-xs font-semibold text-[#7D5F4C] tracking-widest uppercase mt-0.5 font-sans">
+                Café & Eatery
               </span>
             </div>
           </Link>
 
-          {/* Right Navigation, Table Badge & Cart */}
-          <div className="flex items-center gap-2.5 sm:gap-4">
-            {/* Table Identification Badge */}
-            <button
-              onClick={handleOpenTableModal}
-              type="button"
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-xs font-semibold transition shadow-sm ${
-                hasTable
-                  ? 'bg-amber-100/80 border-amber-300 text-amber-900 hover:bg-amber-200/80'
-                  : 'bg-[#f4ebe1] border-[#e3d0bf] text-[#4a3325] hover:bg-[#ede0d4]'
-              }`}
-              title="Click to view or change table"
-            >
-              <MapPin className="w-3.5 h-3.5 text-[#c86227]" />
-              <span>{hasTable ? `Table: ${tableNumber}` : 'Set Table #'}</span>
-            </button>
+          {/* Right Aligned Navigation Group */}
+          <div className="flex items-center gap-5 sm:gap-7 lg:gap-8">
+            <nav className="hidden md:flex items-center gap-6 lg:gap-8 text-sm font-semibold text-[#331B0F] font-sans">
+              <a
+                href="#menu-section"
+                onClick={handleScrollToMenu}
+                className="hover:text-[#B23B14] transition-colors"
+              >
+                About
+              </a>
+              <a
+                href="#menu-section"
+                onClick={handleScrollToMenu}
+                className="hover:text-[#B23B14] transition-colors"
+              >
+                Collections
+              </a>
+              <Link
+                to="/admin"
+                className={`hover:text-[#B23B14] transition-colors ${
+                  location.pathname.startsWith('/admin') ? 'text-[#B23B14]' : ''
+                }`}
+              >
+                Notes
+              </Link>
+              <button
+                onClick={handleOpenTableModal}
+                type="button"
+                className="hover:text-[#B23B14] transition-colors flex items-center gap-1 cursor-pointer"
+              >
+                <span>Locations</span>
+                {hasTable && (
+                  <span className="text-[10px] bg-[#F8DED2] text-[#B23B14] px-2 py-0.5 rounded-full font-bold">
+                    {tableNumber}
+                  </span>
+                )}
+              </button>
+            </nav>
 
-            {/* Admin QR Generator Link */}
-            <Link
-              to="/admin"
-              className={`hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition ${
-                location.pathname.startsWith('/admin')
-                  ? 'bg-[#2e1c14] text-white'
-                  : 'text-[#6e5444] hover:text-[#2e1c14] hover:bg-[#f4ebe1]'
-              }`}
-            >
-              <QrCode className="w-3.5 h-3.5 text-[#c86227]" />
-              <span>QR Admin</span>
-            </Link>
-
-            {/* Cart Icon Button with Real-time Count */}
+            {/* Minimalist Cart Icon with Floating Badge */}
             <Link
               to="/cart"
-              className={`relative flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-300 shadow-sm text-sm font-medium ${
-                location.pathname === '/cart'
-                  ? 'bg-[#c86227] text-white shadow-[#c86227]/25 shadow-md'
-                  : 'bg-[#2e1c14] text-[#faf7f2] hover:bg-[#c86227]'
-              }`}
+              className="relative p-2.5 rounded-full text-[#331B0F] hover:bg-black/5 transition-colors"
               aria-label={`View Cart, ${totalCount} items`}
             >
-              <ShoppingBag className="w-4 h-4" />
-              <span className="hidden sm:inline">Cart</span>
+              <ShoppingBag className="w-5 h-5 stroke-[2.2]" />
               {totalCount > 0 && (
-                <span className="inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 text-xs font-bold leading-none text-white bg-[#c86227] rounded-full border-2 border-white sm:border-transparent">
+                <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] px-1 rounded-full bg-[#B23B14] text-white text-[10px] font-bold leading-none flex items-center justify-center shadow-sm">
                   {totalCount}
                 </span>
               )}
             </Link>
+
+            {/* Terracotta Red/Orange Pill Button: Shop */}
+            <a
+              href="#menu-section"
+              onClick={handleScrollToMenu}
+              className="px-6 sm:px-7 py-2.5 rounded-full bg-[#B23B14] hover:bg-[#962E0B] text-white text-sm font-bold tracking-wide transition-all shadow-sm hover:shadow-md active:scale-95 cursor-pointer font-sans"
+            >
+              Shop
+            </a>
           </div>
         </div>
       </header>
 
-      {/* Quick Table Change Modal */}
+      {/* Dine-In Table Modal */}
       {isEditingTable && (
-        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="w-full max-w-sm bg-white rounded-3xl p-6 border border-[#ebdccd] shadow-2xl animate-scale-in text-[#2e1c14]">
+        <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="w-full max-w-sm bg-[#faf6f0] rounded-3xl p-6 border border-[#ebdccd] shadow-2xl animate-scale-in text-[#361a0c]">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="font-serif font-bold text-lg text-[#2e1c14] flex items-center gap-2">
-                <MapPin className="w-4 h-4 text-[#c86227]" />
-                <span>Dine-In Table Number</span>
+              <h3 className="font-serif font-bold text-lg text-[#361a0c] flex items-center gap-2">
+                <MapPin className="w-4 h-4 text-[#b23b14]" />
+                <span>Dine-In Table</span>
               </h3>
               <button
                 onClick={() => setIsEditingTable(false)}
-                className="p-1 rounded-full text-[#8c6b53] hover:text-[#2e1c14] hover:bg-[#f4ebe1]"
+                className="p-1 rounded-full text-[#8c6b53] hover:text-[#361a0c] hover:bg-white transition"
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
 
-            <p className="text-xs text-[#7d5f4c] mb-4">
-              Scanned a table QR code or placed at a cafe table? Enter your table number below (e.g., T01, T02, 5).
+            <p className="text-xs text-[#7d5f4c] mb-4 leading-relaxed">
+              Scan a table QR code or enter your table number to route your barista orders directly to your table.
             </p>
 
             <form onSubmit={handleSaveTable} className="space-y-4">
@@ -123,26 +157,26 @@ const Navbar = () => {
                   type="text"
                   value={tempTableInput}
                   onChange={(e) => setTempTableInput(e.target.value)}
-                  placeholder="Enter Table # (e.g. T01)"
-                  className="w-full px-3.5 py-2.5 rounded-2xl bg-[#faf7f2] border border-[#e5d5c5] text-sm text-[#2e1c14] focus:outline-none focus:ring-2 focus:ring-[#c86227]/40 uppercase"
+                  placeholder="Enter Table # (e.g. T01, T02)"
+                  className="w-full px-4 py-3 rounded-2xl bg-white border border-[#ebdccd] text-sm text-[#361a0c] font-medium focus:outline-none focus:ring-2 focus:ring-[#b23b14]/40 uppercase tracking-wider"
                   autoFocus
                 />
               </div>
 
-              <div className="flex gap-2">
+              <div className="flex gap-2 pt-1">
                 <button
                   type="button"
                   onClick={() => setIsEditingTable(false)}
-                  className="flex-1 py-2.5 rounded-full border border-[#ebdccd] text-xs font-semibold text-[#6e5444] hover:bg-[#f4ebe1]"
+                  className="flex-1 py-2.5 rounded-full border border-[#ebdccd] text-xs font-bold text-[#6e5444] hover:bg-white transition"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={!tempTableInput.trim()}
-                  className="flex-1 py-2.5 rounded-full bg-[#c86227] hover:bg-[#b0531e] text-white text-xs font-semibold transition disabled:opacity-50"
+                  className="flex-1 py-2.5 rounded-full bg-[#b23b14] hover:bg-[#9c310e] text-white text-xs font-bold transition disabled:opacity-50 shadow-md shadow-[#b23b14]/25"
                 >
-                  Save Table
+                  Confirm Table
                 </button>
               </div>
             </form>

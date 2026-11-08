@@ -44,7 +44,7 @@ const QRGenerator = () => {
     ctx.fillStyle = '#2e1c14';
     ctx.font = 'bold 24px serif';
     ctx.textAlign = 'center';
-    ctx.fillText('Cafe Royale', width / 2, 55);
+    ctx.fillText('Recharge Café', width / 2, 55);
 
     ctx.fillStyle = '#8c6b53';
     ctx.font = '12px sans-serif';
@@ -73,7 +73,7 @@ const QRGenerator = () => {
     // Trigger download
     const url = printCanvas.toDataURL('image/png');
     const link = document.createElement('a');
-    link.download = `cafe-royale-table-${activeTable}-qr.png`;
+    link.download = `recharge-cafe-table-${activeTable}-qr.png`;
     link.href = url;
     link.click();
   };
@@ -194,8 +194,9 @@ const QRGenerator = () => {
             ref={qrRef}
             className="p-6 bg-[#faf7f2] rounded-3xl border-2 border-[#ebdccd] shadow-md flex flex-col items-center text-center w-full max-w-[280px]"
           >
+            <img src="/logo.png" alt="Recharge Café" className="w-12 h-12 rounded-full mb-1 border border-[#ebdccd]" />
             <span className="font-serif font-bold text-lg text-[#2e1c14] mb-1">
-              Cafe Royale
+              Recharge Café
             </span>
             <span className="text-[10px] uppercase tracking-widest text-[#8c6b53] mb-4">
               Scan to Dine In

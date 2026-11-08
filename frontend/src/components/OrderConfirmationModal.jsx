@@ -9,14 +9,17 @@ const OrderConfirmationModal = ({ order, onClose }) => {
     <div className="fixed inset-0 z-50 overflow-y-auto bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
       <div className="relative w-full max-w-lg bg-[#faf7f2] rounded-3xl border border-[#ebdccd] shadow-2xl p-6 sm:p-8 text-[#2e1c14] animate-scale-in">
         {/* Success Icon Badge */}
-        <div className="w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto mb-4 shadow-sm">
-          <CheckCircle2 className="w-9 h-9" />
+        <div className="flex items-center justify-center gap-3 mb-4">
+          <img src="/logo.png" alt="Recharge Café" className="w-12 h-12 rounded-full border border-[#ebdccd]" />
+          <div className="w-12 h-12 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center shadow-sm">
+            <CheckCircle2 className="w-7 h-7" />
+          </div>
         </div>
 
         {/* Title & Order ID */}
         <div className="text-center mb-6">
-          <span className="text-xs font-semibold uppercase tracking-widest text-[#c86227]">
-            Order Confirmed
+          <span className="text-xs font-semibold uppercase tracking-widest text-[#f26522]">
+            Order Confirmed • Recharge Café
           </span>
           <h2 className="font-serif font-bold text-2xl sm:text-3xl text-[#2e1c14] mt-1 mb-2">
             Thank you, {order.customerName}!
