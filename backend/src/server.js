@@ -5,11 +5,15 @@ dotenv.config();
 
 import app from './app.js';
 import connectDB from './config/db.js';
+import { startKeepAliveCron } from './utils/cronKeepAlive.js';
 
 const PORT = process.env.PORT || 5000;
 
 // Connect to MongoDB Atlas
 connectDB();
+
+// Start Keep-Alive Cron job to prevent Render backend from sleeping
+startKeepAliveCron();
 
 // Start HTTP Server
 const server = app.listen(PORT, () => {
