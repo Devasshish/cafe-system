@@ -2,7 +2,7 @@ import React from 'react';
 import MenuCard from './MenuCard';
 import { Coffee, RotateCcw } from 'lucide-react';
 
-const MenuGrid = ({ items, onAddToCart, onResetFilters }) => {
+const MenuGrid = ({ items, onAddToCart, onResetFilters, viewMode = 'grid' }) => {
   if (!items || items.length === 0) {
     return (
       <div className="text-center py-16 px-4 bg-white rounded-3xl border border-[#ebdccd] shadow-sm my-6 max-w-lg mx-auto">
@@ -19,7 +19,7 @@ const MenuGrid = ({ items, onAddToCart, onResetFilters }) => {
           <button
             onClick={onResetFilters}
             type="button"
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#2e1c14] text-[#faf7f2] hover:bg-[#c86227] transition-all text-xs sm:text-sm font-semibold shadow-sm"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#2e1c14] text-[#faf7f2] hover:bg-[#c86227] transition-all text-xs sm:text-sm font-semibold shadow-sm cursor-pointer"
           >
             <RotateCcw className="w-4 h-4" />
             <span>Reset All Filters</span>
@@ -29,14 +29,23 @@ const MenuGrid = ({ items, onAddToCart, onResetFilters }) => {
     );
   }
 
+  if (viewMode === 'list') {
+    return (
+      <div className="space-y-3.5 max-w-4xl mx-auto">
+        {items.map((item) => (
+          <MenuCard key={item._id} item={item} variant="list" onAddToCart={onAddToCart} />
+        ))}
+      </div>
+    );
+  }
+
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 sm:gap-6">
       {items.map((item) => (
-        <MenuCard key={item._id} item={item} onAddToCart={onAddToCart} />
+        <MenuCard key={item._id} item={item} variant="card" onAddToCart={onAddToCart} />
       ))}
     </div>
   );
 };
 
 export default MenuGrid;
-

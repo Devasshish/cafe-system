@@ -1,18 +1,22 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
 import Navbar from '../components/Navbar';
+import FloatingTrayBar from '../components/FloatingTrayBar';
 import { Heart } from 'lucide-react';
 
 const MainLayout = () => {
   return (
-    <div className="min-h-screen flex flex-col bg-[#F6EFE5] text-[#331B0F] selection:bg-[#B23B14]/20 selection:text-[#B23B14]">
+    <div className="min-h-screen flex flex-col bg-[#F6EFE5] text-[#331B0F] selection:bg-[#B23B14]/20 selection:text-[#B23B14] relative">
       {/* Sticky Top Navbar */}
       <Navbar />
 
       {/* Main Page Area */}
-      <main className="flex-1 w-full">
+      <main className="flex-1 w-full pb-16">
         <Outlet />
       </main>
+
+      {/* Floating Bottom Tray Bar (Appears when items are added to tray) */}
+      <FloatingTrayBar />
 
       {/* Footer */}
       <footer className="bg-[#f4ebe1] border-t border-[#ebdccd] py-8 text-center text-xs text-[#7d5f4c]">

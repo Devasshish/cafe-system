@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { ShoppingBag, MapPin, X } from 'lucide-react';
+import { ShoppingBag, MapPin, X, ChevronDown } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { useTable } from '../context/TableContext';
+import api from '../services/api';
 
 const Navbar = () => {
   const { totalCount } = useCart();
@@ -12,6 +14,21 @@ const Navbar = () => {
 
   const [isEditingTable, setIsEditingTable] = useState(false);
   const [tempTableInput, setTempTableInput] = useState('');
+  const [availableTables, setAvailableTables] = useState([]);
+
+  useEffect(() => {
+    const fetchTables = async () => {
+      try {
+        const res = await api.get('/tables');
+        if (res.data && res.data.success) {
+          setAvailableTables(res.data.data || []);
+        }
+      } catch (err) {
+        console.error('Failed to load tables in Navbar:', err);
+      }
+    };
+    fetchTables();
+  }, []);
 
   const handleOpenTableModal = () => {
     setTempTableInput(tableNumber || '');
@@ -66,123 +83,144 @@ const Navbar = () => {
           </Link>
 
           {/* Right Aligned Navigation Group */}
-          <div className="flex items-center gap-5 sm:gap-7 lg:gap-8">
+          <div className="flex items-center gap-4 sm:gap-6 lg:gap-8">
             <nav className="hidden md:flex items-center gap-6 lg:gap-8 text-sm font-semibold text-[#331B0F] font-sans">
               <a
                 href="#menu-section"
                 onClick={handleScrollToMenu}
                 className="hover:text-[#B23B14] transition-colors"
               >
-                About
-              </a>
-              <a
-                href="#menu-section"
-                onClick={handleScrollToMenu}
-                className="hover:text-[#B23B14] transition-colors"
-              >
-                Collections
+                Menu
               </a>
               <Link
-                to="/admin"
+                to="/notes"
                 className={`hover:text-[#B23B14] transition-colors ${
-                  location.pathname.startsWith('/admin') ? 'text-[#B23B14]' : ''
+                  location.pathname.startsWith('/notes') ? 'text-[#B23B14]' : ''
                 }`}
               >
                 Notes
               </Link>
-              <button
-                onClick={handleOpenTableModal}
-                type="button"
-                className="hover:text-[#B23B14] transition-colors flex items-center gap-1 cursor-pointer"
+              <Link
+                to="/reviews"
+                className={`hover:text-[#B23B14] transition-colors ${
+                  location.pathname.startsWith('/reviews') || location.pathname.startsWith('/feedback')
+                    ? 'text-[#B23B14]'
+                    : ''
+                }`}
               >
-                <span>Locations</span>
-                {hasTable && (
-                  <span className="text-[10px] bg-[#F8DED2] text-[#B23B14] px-2 py-0.5 rounded-full font-bold">
-                    {tableNumber}
-                  </span>
-                )}
-              </button>
+                Reviews
+              </Link>
             </nav>
 
-            {/* Minimalist Cart Icon with Floating Badge */}
+            {/* Table Number Badge */}
+            <button
+              onClick={handleOpenTableModal}
+              type="button"
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold transition-all border ${
+                hasTable
+                  ? 'bg-[#F8DED2] text-[#B23B14] border-[#f0c8b6] shadow-xs'
+                  : 'bg-white/80 text-[#7D5F4C] border-[#EBDDCC] hover:border-[#B23B14]/40 hover:bg-white'
+              }`}
+              title="Click to view or set dine-in table number"
+            >
+              <MapPin className="w-3.5 h-3.5 text-[#B23B14]" />
+              <span className="hidden sm:inline">
+                {hasTable ? `Table ${tableNumber}` : 'Set Table'}
+              </span>
+              <span className="sm:hidden font-mono">
+                {hasTable ? tableNumber : '#'}
+              </span>
+            </button>
+
+            {/* Primary Terracotta Pill Button: Coffee Tray (Replaces 'Order Brew' with Tray) */}
             <Link
               to="/cart"
-              className="relative p-2.5 rounded-full text-[#331B0F] hover:bg-black/5 transition-colors"
-              aria-label={`View Cart, ${totalCount} items`}
+              className="relative inline-flex items-center gap-2 px-4 sm:px-6 py-2.5 rounded-full bg-[#B23B14] hover:bg-[#962E0B] text-white text-xs sm:text-sm font-bold tracking-wide transition-all shadow-sm hover:shadow-md active:scale-95 cursor-pointer font-sans whitespace-nowrap group"
+              aria-label={`My Coffee Tray, ${totalCount} items`}
+              title="View Coffee Tray"
             >
-              <ShoppingBag className="w-5 h-5 stroke-[2.2]" />
+              <ShoppingBag className="w-4 h-4 stroke-[2.2] group-hover:scale-110 transition-transform" />
+              <span>Tray</span>
               {totalCount > 0 && (
-                <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] px-1 rounded-full bg-[#B23B14] text-white text-[10px] font-bold leading-none flex items-center justify-center shadow-sm">
+                <span className="min-w-[20px] h-[20px] px-1.5 rounded-full bg-white text-[#B23B14] text-[11px] font-black leading-none flex items-center justify-center shadow-xs">
                   {totalCount}
                 </span>
               )}
             </Link>
-
-            {/* Terracotta Red/Orange Pill Button: Shop */}
-            <a
-              href="#menu-section"
-              onClick={handleScrollToMenu}
-              className="px-6 sm:px-7 py-2.5 rounded-full bg-[#B23B14] hover:bg-[#962E0B] text-white text-sm font-bold tracking-wide transition-all shadow-sm hover:shadow-md active:scale-95 cursor-pointer font-sans"
-            >
-              Shop
-            </a>
           </div>
         </div>
       </header>
 
       {/* Dine-In Table Modal */}
-      {isEditingTable && (
-        <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="w-full max-w-sm bg-[#faf6f0] rounded-3xl p-6 border border-[#ebdccd] shadow-2xl animate-scale-in text-[#361a0c]">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="font-serif font-bold text-lg text-[#361a0c] flex items-center gap-2">
-                <MapPin className="w-4 h-4 text-[#b23b14]" />
-                <span>Dine-In Table</span>
-              </h3>
-              <button
-                onClick={() => setIsEditingTable(false)}
-                className="p-1 rounded-full text-[#8c6b53] hover:text-[#361a0c] hover:bg-white transition"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
+      {isEditingTable &&
+        (typeof document !== 'undefined'
+          ? createPortal(
+              <div className="fixed inset-0 z-[9999] bg-black/40 backdrop-blur-sm flex items-center justify-center p-4">
+                <div className="w-full max-w-sm bg-[#faf6f0] rounded-3xl p-6 border border-[#ebdccd] shadow-2xl animate-scale-in text-[#361a0c]">
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="font-serif font-bold text-lg text-[#361a0c] flex items-center gap-2">
+                      <MapPin className="w-4 h-4 text-[#b23b14]" />
+                      <span>Dine-In Table</span>
+                    </h3>
+                    <button
+                      onClick={() => setIsEditingTable(false)}
+                      className="p-1 rounded-full text-[#8c6b53] hover:text-[#361a0c] hover:bg-white transition"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  </div>
 
-            <p className="text-xs text-[#7d5f4c] mb-4 leading-relaxed">
-              Scan a table QR code or enter your table number to route your barista orders directly to your table.
-            </p>
+                  <p className="text-xs text-[#7d5f4c] mb-4 leading-relaxed">
+                    Select your dine-in table number from the registered cafe tables below:
+                  </p>
 
-            <form onSubmit={handleSaveTable} className="space-y-4">
-              <div>
-                <input
-                  type="text"
-                  value={tempTableInput}
-                  onChange={(e) => setTempTableInput(e.target.value)}
-                  placeholder="Enter Table # (e.g. T01, T02)"
-                  className="w-full px-4 py-3 rounded-2xl bg-white border border-[#ebdccd] text-sm text-[#361a0c] font-medium focus:outline-none focus:ring-2 focus:ring-[#b23b14]/40 uppercase tracking-wider"
-                  autoFocus
-                />
-              </div>
+                  <form onSubmit={handleSaveTable} className="space-y-4">
+                    <div>
+                      <div className="relative">
+                        <select
+                          value={tempTableInput}
+                          onChange={(e) => setTempTableInput(e.target.value)}
+                          className="w-full px-4 py-3 rounded-2xl bg-white border border-[#ebdccd] text-sm text-[#361a0c] font-bold focus:outline-none focus:ring-2 focus:ring-[#b23b14]/40 appearance-none cursor-pointer"
+                          autoFocus
+                        >
+                          <option value="">-- Choose Table from Dropdown --</option>
+                          {availableTables.map((tbl) => (
+                            <option key={tbl._id} value={tbl.tableNumber}>
+                              Table {tbl.tableNumber}
+                            </option>
+                          ))}
+                          {tempTableInput && !availableTables.some((t) => t.tableNumber === tempTableInput) && (
+                            <option value={tempTableInput}>Table {tempTableInput}</option>
+                          )}
+                        </select>
+                        <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-[#7D5F4C]">
+                          <ChevronDown className="w-4 h-4" />
+                        </div>
+                      </div>
+                    </div>
 
-              <div className="flex gap-2 pt-1">
-                <button
-                  type="button"
-                  onClick={() => setIsEditingTable(false)}
-                  className="flex-1 py-2.5 rounded-full border border-[#ebdccd] text-xs font-bold text-[#6e5444] hover:bg-white transition"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  disabled={!tempTableInput.trim()}
-                  className="flex-1 py-2.5 rounded-full bg-[#b23b14] hover:bg-[#9c310e] text-white text-xs font-bold transition disabled:opacity-50 shadow-md shadow-[#b23b14]/25"
-                >
-                  Confirm Table
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
+                    <div className="flex gap-2 pt-1">
+                      <button
+                        type="button"
+                        onClick={() => setIsEditingTable(false)}
+                        className="flex-1 py-2.5 rounded-full border border-[#ebdccd] text-xs font-bold text-[#6e5444] hover:bg-white transition"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        type="submit"
+                        disabled={!tempTableInput.trim()}
+                        className="flex-1 py-2.5 rounded-full bg-[#b23b14] hover:bg-[#9c310e] text-white text-xs font-bold transition disabled:opacity-50 shadow-md shadow-[#b23b14]/25"
+                      >
+                        Confirm Table
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>,
+              document.body
+            )
+          : null)}
     </>
   );
 };

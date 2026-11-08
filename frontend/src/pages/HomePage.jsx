@@ -6,7 +6,7 @@ import SortDropdown from '../components/SortDropdown';
 import MenuGrid from '../components/MenuGrid';
 import LoadingSkeleton from '../components/LoadingSkeleton';
 import api from '../services/api';
-import { AlertCircle, RefreshCw, Sparkles } from 'lucide-react';
+import { AlertCircle, RefreshCw, Sparkles, LayoutGrid, List } from 'lucide-react';
 
 const HomePage = () => {
   const [menuItems, setMenuItems] = useState([]);
@@ -18,6 +18,7 @@ const HomePage = () => {
   const [debouncedSearch, setDebouncedSearch] = useState('');
   const [activeCategory, setActiveCategory] = useState('');
   const [activeSort, setActiveSort] = useState('newest');
+  const [viewMode, setViewMode] = useState('grid');
 
   // Debounce search input for silky-smooth experience
   useEffect(() => {
@@ -117,12 +118,41 @@ const HomePage = () => {
                 onClear={() => setSearchTerm('')}
               />
             </div>
-            <div className="flex items-center justify-between sm:justify-end gap-3">
+            <div className="flex items-center justify-between sm:justify-end gap-3 flex-wrap">
               {!loading && !error && (
-                <span className="text-xs font-medium text-[#777]">
+                <span className="text-xs font-medium text-[#777] hidden md:inline">
                   Showing {menuItems.length} {menuItems.length === 1 ? 'item' : 'items'}
                 </span>
               )}
+
+              {/* View Layout Switcher (Artisan Cards vs Clean List) */}
+              <div className="inline-flex items-center p-1 rounded-xl bg-white border border-[#EBDDCC] shadow-xs">
+                <button
+                  type="button"
+                  onClick={() => setViewMode('grid')}
+                  title="Card Grid View"
+                  className={`p-1.5 rounded-lg transition-all cursor-pointer ${
+                    viewMode === 'grid'
+                      ? 'bg-[#B23B14] text-white shadow-xs'
+                      : 'text-[#7D5F4C] hover:text-[#331B0F] hover:bg-[#FAF6F0]'
+                  }`}
+                >
+                  <LayoutGrid className="w-4 h-4" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setViewMode('list')}
+                  title="Compact List View"
+                  className={`p-1.5 rounded-lg transition-all cursor-pointer ${
+                    viewMode === 'list'
+                      ? 'bg-[#B23B14] text-white shadow-xs'
+                      : 'text-[#7D5F4C] hover:text-[#331B0F] hover:bg-[#FAF6F0]'
+                  }`}
+                >
+                  <List className="w-4 h-4" />
+                </button>
+              </div>
+
               <SortDropdown activeSort={activeSort} onSortChange={setActiveSort} />
             </div>
           </div>
@@ -154,6 +184,7 @@ const HomePage = () => {
         ) : (
           <MenuGrid
             items={menuItems}
+            viewMode={viewMode}
             onAddToCart={handleAddToCart}
             onResetFilters={handleResetFilters}
           />

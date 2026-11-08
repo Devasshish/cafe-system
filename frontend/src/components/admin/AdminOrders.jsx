@@ -11,6 +11,7 @@ import {
   User,
   X,
   Filter,
+  ShieldCheck,
 } from 'lucide-react';
 
 const STATUS_OPTIONS = ['All', 'Pending', 'Preparing', 'Ready', 'Completed', 'Cancelled'];
@@ -138,8 +139,14 @@ const AdminOrders = () => {
                     <span className="font-bold text-[#2e1c14] block">
                       {order.customerName}
                     </span>
-                    <span className="text-[11px] text-[#8c6b53] block">
-                      {order.phoneNumber}
+                    <span className="text-[11px] text-[#8c6b53] flex items-center gap-1">
+                      <span>{order.phoneNumber}</span>
+                      {order.isPhoneVerified && (
+                        <span className="inline-flex items-center gap-0.5 text-[9px] font-bold text-emerald-700 bg-emerald-50 px-1 py-0.5 rounded border border-emerald-200">
+                          <ShieldCheck className="w-2.5 h-2.5" />
+                          Verified
+                        </span>
+                      )}
                     </span>
                   </td>
                   <td className="py-3 text-[#6e5444]">
@@ -224,10 +231,18 @@ const AdminOrders = () => {
                 <span className="text-[#8c6b53]">Customer:</span>
                 <span className="font-bold text-[#2e1c14]">{selectedOrder.customerName}</span>
               </div>
-              <div className="flex items-center gap-2 p-2.5 rounded-xl bg-[#faf7f2] border border-[#ebdccd]">
-                <Phone className="w-4 h-4 text-[#c86227]" />
-                <span className="text-[#8c6b53]">Phone:</span>
-                <span className="font-bold text-[#2e1c14]">{selectedOrder.phoneNumber}</span>
+              <div className="flex items-center justify-between p-2.5 rounded-xl bg-[#faf7f2] border border-[#ebdccd]">
+                <div className="flex items-center gap-2">
+                  <Phone className="w-4 h-4 text-[#c86227]" />
+                  <span className="text-[#8c6b53]">Phone:</span>
+                  <span className="font-bold text-[#2e1c14]">{selectedOrder.phoneNumber}</span>
+                </div>
+                {selectedOrder.isPhoneVerified && (
+                  <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+                    <ShieldCheck className="w-3 h-3" />
+                    Phone Verified
+                  </span>
+                )}
               </div>
             </div>
 

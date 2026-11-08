@@ -4,6 +4,7 @@ import { useCart } from '../context/CartContext';
 import { useTable } from '../context/TableContext';
 import CartItem from '../components/CartItem';
 import OrderConfirmationModal from '../components/OrderConfirmationModal';
+import OtpVerificationModal from '../components/OtpVerificationModal';
 import api from '../services/api';
 import {
   ShoppingBag,
@@ -16,6 +17,8 @@ import {
   User,
   Phone,
   Hash,
+  ShieldCheck,
+  ChevronDown,
 } from 'lucide-react';
 
 const CartPage = () => {
@@ -27,11 +30,30 @@ const CartPage = () => {
   const [customerName, setCustomerName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [tableNumber, setTableNumber] = useState(contextTable || '');
+  const [availableTables, setAvailableTables] = useState([]);
+
+  // Fetch registered tables for dropdown
+  useEffect(() => {
+    const fetchAvailableTables = async () => {
+      try {
+        const res = await api.get('/tables');
+        if (res.data && res.data.success) {
+          setAvailableTables(res.data.data || []);
+        }
+      } catch (err) {
+        console.error('Failed to load tables for checkout dropdown:', err);
+      }
+    };
+    fetchAvailableTables();
+  }, []);
 
   // UI & Submission state
   const [fieldErrors, setFieldErrors] = useState({});
   const [apiError, setApiError] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSendingOtp, setIsSendingOtp] = useState(false);
+  const [showOtpModal, setShowOtpModal] = useState(false);
+  const [otpDevCode, setOtpDevCode] = useState(null);
   const [confirmedOrder, setConfirmedOrder] = useState(null);
 
   // Sync with context or URL parameter
@@ -55,9 +77,9 @@ const CartPage = () => {
 
     const phoneRegex = /^\+?[0-9\s-]{7,15}$/;
     if (!phoneNumber.trim()) {
-      errors.phoneNumber = 'Phone number is required for order updates';
+      errors.phoneNumber = 'Mobile number is required for SMS verification';
     } else if (!phoneRegex.test(phoneNumber.trim())) {
-      errors.phoneNumber = 'Please enter a valid phone number (7-15 digits)';
+      errors.phoneNumber = 'Please enter a valid mobile number (7-15 digits)';
     }
 
     if (!tableNumber.trim()) {
@@ -65,22 +87,54 @@ const CartPage = () => {
     }
 
     if (cartItems.length === 0) {
-      errors.cart = 'Your cart is empty. Please add items before placing an order.';
+      errors.cart = 'Your tray is empty. Please add items before placing an order.';
     }
 
     setFieldErrors(errors);
     return Object.keys(errors).length === 0;
   };
 
-  const handlePlaceOrder = async (e) => {
+  /**
+   * Last stage trigger: Initiates Twilio mobile verification before placing order
+   */
+  const handleInitiateOrder = async (e) => {
     e.preventDefault();
 
-    if (isSubmitting) return; // Prevent duplicate submissions
+    if (isSubmitting || isSendingOtp) return;
 
     if (!validateForm()) {
       return;
     }
 
+    setIsSendingOtp(true);
+    setApiError(null);
+
+    try {
+      const response = await api.post('/otp/send', {
+        phoneNumber: phoneNumber.trim(),
+      });
+
+      if (response.data && response.data.success) {
+        setOtpDevCode(response.data.data?.devCode || null);
+        setShowOtpModal(true);
+      } else {
+        throw new Error(response.data?.message || 'Failed to dispatch verification code');
+      }
+    } catch (err) {
+      console.error('Failed to send OTP via Twilio:', err);
+      const serverMessage =
+        err.response?.data?.message ||
+        'Could not send verification code to this mobile number. Please verify the digits and try again.';
+      setApiError(serverMessage);
+    } finally {
+      setIsSendingOtp(false);
+    }
+  };
+
+  /**
+   * Called immediately after Twilio OTP is verified successfully
+   */
+  const handleVerifiedOrderPlacement = async () => {
     setIsSubmitting(true);
     setApiError(null);
 
@@ -102,9 +156,10 @@ const CartPage = () => {
 
       if (response.data && response.data.success) {
         const newOrder = response.data.data;
+        setShowOtpModal(false);
         setConfirmedOrder(newOrder);
 
-        // Clear cart ONLY after verified successful order creation
+        // Clear tray ONLY after verified successful order creation
         clearCart();
       } else {
         throw new Error(response.data?.message || 'Failed to place order');
@@ -130,10 +185,10 @@ const CartPage = () => {
             <ShoppingBag className="w-10 h-10 text-[#c86227]" />
           </div>
           <h2 className="font-serif font-bold text-2xl sm:text-3xl text-[#2e1c14] mb-3">
-            Your Cart is Empty
+            Your Coffee Tray is Empty
           </h2>
           <p className="text-sm text-[#7d5f4c] mb-8 max-w-md mx-auto leading-relaxed">
-            Looks like you haven't added any handcrafted coffees or fresh pastries yet.
+            Looks like you haven't added any handcrafted coffees or fresh pastries to your table tray yet.
             Explore our artisan menu to get started!
           </p>
           <Link
@@ -167,7 +222,7 @@ const CartPage = () => {
             className="inline-flex items-center gap-1.5 text-xs text-[#8c6b53] hover:text-rose-600 transition"
           >
             <Trash2 className="w-3.5 h-3.5" />
-            <span>Clear Cart</span>
+            <span>Clear Tray</span>
           </button>
         )}
       </div>
@@ -212,11 +267,11 @@ const CartPage = () => {
             )}
 
             {/* Checkout Input Form */}
-            <form onSubmit={handlePlaceOrder} className="space-y-4">
+            <form onSubmit={handleInitiateOrder} className="space-y-4">
               {/* Customer Name */}
               <div>
                 <label className="block text-xs font-semibold text-[#4a3325] mb-1.5 flex items-center gap-1.5">
-                  <User className="w-3.5 h-3.5 text-[#c86227]" />
+                  <User className="w-3.5 h-3.5 text-[#B23B14]" />
                   <span>Customer Name *</span>
                 </label>
                 <input
@@ -229,7 +284,7 @@ const CartPage = () => {
                     }
                   }}
                   placeholder="e.g. Sarah Connor"
-                  className={`w-full px-3.5 py-2.5 rounded-2xl bg-[#faf7f2] border text-xs sm:text-sm text-[#2e1c14] placeholder-[#a68c78] focus:outline-none focus:ring-2 focus:ring-[#c86227]/40 transition ${
+                  className={`w-full px-3.5 py-2.5 rounded-2xl bg-[#faf7f2] border text-xs sm:text-sm text-[#2e1c14] placeholder-[#a68c78] focus:outline-none focus:ring-2 focus:ring-[#B23B14]/40 transition ${
                     fieldErrors.customerName ? 'border-rose-400 bg-rose-50/50' : 'border-[#e5d5c5]'
                   }`}
                 />
@@ -241,8 +296,8 @@ const CartPage = () => {
               {/* Phone Number */}
               <div>
                 <label className="block text-xs font-semibold text-[#4a3325] mb-1.5 flex items-center gap-1.5">
-                  <Phone className="w-3.5 h-3.5 text-[#c86227]" />
-                  <span>Phone Number *</span>
+                  <Phone className="w-3.5 h-3.5 text-[#B23B14]" />
+                  <span>Mobile Number *</span>
                 </label>
                 <input
                   type="tel"
@@ -253,36 +308,58 @@ const CartPage = () => {
                       setFieldErrors((prev) => ({ ...prev, phoneNumber: null }));
                     }
                   }}
-                  placeholder="e.g. +1 555-0199 or 9876543210"
-                  className={`w-full px-3.5 py-2.5 rounded-2xl bg-[#faf7f2] border text-xs sm:text-sm text-[#2e1c14] placeholder-[#a68c78] focus:outline-none focus:ring-2 focus:ring-[#c86227]/40 transition ${
+                  placeholder="e.g. 9876543210 or +91 98765 43210"
+                  className={`w-full px-3.5 py-2.5 rounded-2xl bg-[#faf7f2] border text-xs sm:text-sm text-[#2e1c14] placeholder-[#a68c78] focus:outline-none focus:ring-2 focus:ring-[#B23B14]/40 transition ${
                     fieldErrors.phoneNumber ? 'border-rose-400 bg-rose-50/50' : 'border-[#e5d5c5]'
                   }`}
                 />
-                {fieldErrors.phoneNumber && (
+                {fieldErrors.phoneNumber ? (
                   <p className="text-[11px] text-rose-600 mt-1">{fieldErrors.phoneNumber}</p>
+                ) : (
+                  <p className="text-[10px] text-[#8C7A6B] mt-1">
+                    A 6-digit verification code will be sent to this number.
+                  </p>
                 )}
               </div>
 
-              {/* Table Number */}
+              {/* Table Selection Dropdown */}
               <div>
-                <label className="block text-xs font-semibold text-[#4a3325] mb-1.5 flex items-center gap-1.5">
-                  <Hash className="w-3.5 h-3.5 text-[#c86227]" />
-                  <span>Table Number *</span>
-                </label>
-                <input
-                  type="text"
-                  value={tableNumber}
-                  onChange={(e) => {
-                    setTableNumber(e.target.value);
-                    if (fieldErrors.tableNumber) {
-                      setFieldErrors((prev) => ({ ...prev, tableNumber: null }));
-                    }
-                  }}
-                  placeholder="e.g. Table 4 or Bar-2"
-                  className={`w-full px-3.5 py-2.5 rounded-2xl bg-[#faf7f2] border text-xs sm:text-sm text-[#2e1c14] placeholder-[#a68c78] focus:outline-none focus:ring-2 focus:ring-[#c86227]/40 transition ${
-                    fieldErrors.tableNumber ? 'border-rose-400 bg-rose-50/50' : 'border-[#e5d5c5]'
-                  }`}
-                />
+                <div className="flex items-center justify-between mb-1.5">
+                  <label className="block text-xs font-semibold text-[#4a3325] flex items-center gap-1.5">
+                    <Hash className="w-3.5 h-3.5 text-[#B23B14]" />
+                    <span>Table Selection *</span>
+                  </label>
+                  <span className="text-[10px] text-[#8C7A6B]">
+                    Choose your dine-in table
+                  </span>
+                </div>
+                <div className="relative">
+                  <select
+                    value={tableNumber}
+                    onChange={(e) => {
+                      setTableNumber(e.target.value);
+                      if (fieldErrors.tableNumber) {
+                        setFieldErrors((prev) => ({ ...prev, tableNumber: null }));
+                      }
+                    }}
+                    className={`w-full px-3.5 py-2.5 rounded-2xl bg-[#faf7f2] border text-xs sm:text-sm text-[#2e1c14] focus:outline-none focus:ring-2 focus:ring-[#B23B14]/40 transition appearance-none cursor-pointer font-bold ${
+                      fieldErrors.tableNumber ? 'border-rose-400 bg-rose-50/50' : 'border-[#e5d5c5]'
+                    }`}
+                  >
+                    <option value="">-- Select Your Table from Dropdown --</option>
+                    {availableTables.map((tbl) => (
+                      <option key={tbl._id} value={tbl.tableNumber}>
+                        Table {tbl.tableNumber}
+                      </option>
+                    ))}
+                    {tableNumber && !availableTables.some((t) => t.tableNumber === tableNumber) && (
+                      <option value={tableNumber}>Table {tableNumber}</option>
+                    )}
+                  </select>
+                  <div className="absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-[#7D5F4C]">
+                    <ChevronDown className="w-4 h-4" />
+                  </div>
+                </div>
                 {fieldErrors.tableNumber && (
                   <p className="text-[11px] text-rose-600 mt-1">{fieldErrors.tableNumber}</p>
                 )}
@@ -300,36 +377,48 @@ const CartPage = () => {
                 </div>
                 <div className="flex justify-between font-serif font-bold text-base sm:text-lg text-[#2e1c14] pt-2 border-t border-[#ebdccd]">
                   <span>Order Total</span>
-                  <span className="text-[#c86227]">₹{totalAmount.toFixed(2)}</span>
+                  <span className="text-[#B23B14]">₹{totalAmount.toFixed(2)}</span>
                 </div>
               </div>
 
               {/* Place Order CTA Button */}
               <button
                 type="submit"
-                disabled={isSubmitting || cartItems.length === 0}
-                className="w-full mt-2 py-3.5 px-4 rounded-full bg-[#c86227] hover:bg-[#b0531e] text-white font-semibold text-sm transition-all duration-200 shadow-md shadow-[#c86227]/25 disabled:bg-[#d5c3b5] disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                disabled={isSubmitting || isSendingOtp || cartItems.length === 0}
+                className="w-full mt-2 py-3.5 px-4 rounded-xl bg-[#B23B14] hover:bg-[#962e0b] active:scale-[0.99] text-white font-bold text-sm transition-all duration-200 shadow-md shadow-[#B23B14]/25 disabled:bg-[#d5c3b5] disabled:cursor-not-allowed flex items-center justify-center gap-2 cursor-pointer"
               >
-                {isSubmitting ? (
+                {isSendingOtp ? (
                   <>
                     <Loader2 className="w-4 h-4 animate-spin" />
-                    <span>Placing Order...</span>
+                    <span>Sending SMS Verification Code...</span>
                   </>
                 ) : (
                   <>
-                    <CheckCircle2 className="w-4 h-4" />
-                    <span>Place Order (₹{totalAmount.toFixed(2)})</span>
+                    <ShieldCheck className="w-4 h-4" />
+                    <span>Verify Mobile & Place Order (₹{totalAmount.toFixed(2)})</span>
                   </>
                 )}
               </button>
 
-              <p className="text-[10px] text-center text-[#8c6b53] mt-2">
-                Order totals are verified and calculated securely on the server.
+              <p className="text-[10px] text-center text-[#8c6b53] mt-2 flex items-center justify-center gap-1">
+                <ShieldCheck className="w-3 h-3 text-[#B23B14]" />
+                <span>Secure Mobile OTP Verification</span>
               </p>
             </form>
           </div>
         </div>
       </div>
+
+      {/* Twilio Mobile OTP Verification Modal */}
+      {showOtpModal && (
+        <OtpVerificationModal
+          phoneNumber={phoneNumber}
+          devCodeHint={otpDevCode}
+          onVerified={handleVerifiedOrderPlacement}
+          onClose={() => setShowOtpModal(false)}
+          isPlacingOrder={isSubmitting}
+        />
+      )}
 
       {/* Success Confirmation Modal */}
       {confirmedOrder && (

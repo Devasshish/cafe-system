@@ -4,11 +4,13 @@ import AdminLogin from '../components/admin/AdminLogin';
 import AdminOverview from '../components/admin/AdminOverview';
 import AdminMenu from '../components/admin/AdminMenu';
 import AdminOrders from '../components/admin/AdminOrders';
+import AdminCustomers from '../components/admin/AdminCustomers';
 import QRGenerator from '../components/QRGenerator';
 import {
   LayoutDashboard,
   UtensilsCrossed,
   ShoppingBag,
+  Users,
   QrCode,
   LogOut,
   ExternalLink,
@@ -31,6 +33,7 @@ const AdminPage = () => {
   const navItems = [
     { id: 'overview', label: 'Dashboard Overview', icon: LayoutDashboard },
     { id: 'orders', label: 'Live Orders', icon: ShoppingBag },
+    { id: 'customers', label: 'Customers', icon: Users },
     { id: 'menu', label: 'Menu Catalog', icon: UtensilsCrossed },
     { id: 'qr', label: 'Table QR Generator', icon: QrCode },
   ];
@@ -70,9 +73,6 @@ const AdminPage = () => {
           </span>
           <span className="font-serif font-bold text-base text-[#2e1c14] block">
             {adminUser?.username || 'Admin'}
-          </span>
-          <span className="inline-block mt-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-100 text-emerald-800">
-            Authenticated Admin
           </span>
         </div>
 
@@ -126,6 +126,7 @@ const AdminPage = () => {
       <main className="flex-1 w-full min-w-0">
         {activeTab === 'overview' && <AdminOverview onNavigateTab={setActiveTab} />}
         {activeTab === 'orders' && <AdminOrders />}
+        {activeTab === 'customers' && <AdminCustomers />}
         {activeTab === 'menu' && <AdminMenu />}
         {activeTab === 'qr' && <QRGenerator />}
       </main>

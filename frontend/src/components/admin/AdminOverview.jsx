@@ -228,12 +228,20 @@ const AdminOverview = ({ onNavigateTab }) => {
             </div>
 
             {onNavigateTab && (
-              <button
-                onClick={() => onNavigateTab('menu')}
-                className="w-full py-2.5 rounded-full bg-[#2e1c14] hover:bg-[#c86227] text-white text-xs font-semibold transition"
-              >
-                Manage Menu Catalog
-              </button>
+              <div className="space-y-2 pt-1">
+                <button
+                  onClick={() => onNavigateTab('customers')}
+                  className="w-full py-2.5 rounded-full bg-[#c86227] hover:bg-[#b0531e] text-white text-xs font-semibold transition cursor-pointer"
+                >
+                  View Customer Directory
+                </button>
+                <button
+                  onClick={() => onNavigateTab('menu')}
+                  className="w-full py-2.5 rounded-full bg-[#2e1c14] hover:bg-[#4a3325] text-white text-xs font-semibold transition cursor-pointer"
+                >
+                  Manage Menu Catalog
+                </button>
+              </div>
             )}
           </div>
         </div>

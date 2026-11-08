@@ -1,5 +1,6 @@
 import Order from '../models/Order.js';
 import MenuItem from '../models/MenuItem.js';
+import { isPhoneVerified } from '../services/twilioService.js';
 
 /**
  * Helper to generate a collision-resistant unique order number
@@ -92,10 +93,13 @@ export const createOrder = async (req, res, next) => {
     const orderNumber = await generateUniqueOrderNumber();
 
     // 7. Save order in MongoDB
+    const verified = isPhoneVerified(phoneNumber);
+
     const order = await Order.create({
       orderNumber,
       customerName: customerName.trim(),
       phoneNumber: phoneNumber.trim(),
+      isPhoneVerified: verified,
       tableNumber: String(tableNumber).trim(),
       items: orderItemsSnapshots,
       subtotal: calculatedSubtotal,

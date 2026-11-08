@@ -1,3 +1,4 @@
 export { default as MenuItem } from './MenuItem.js';
 export { default as Order } from './Order.js';
+export { default as Table } from './Table.js';
 

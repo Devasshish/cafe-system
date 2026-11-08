@@ -106,3 +106,120 @@ export const getAdminStats = async (req, res, next) => {
   }
 };
 
+/**
+ * @desc    Get aggregated customers list with order counts & details
+ * @route   GET /api/admin/customers
+ * @access  Admin
+ */
+export const getAdminCustomers = async (req, res, next) => {
+  try {
+    const { search, sortBy = 'orders' } = req.query;
+
+    const pipeline = [
+      {
+        $sort: { createdAt: -1 },
+      },
+      {
+        $group: {
+          _id: {
+            $trim: {
+              input: {
+                $replaceAll: {
+                  input: { $ifNull: ['$phoneNumber', ''] },
+                  find: ' ',
+                  replacement: '',
+                },
+              },
+            },
+          },
+          customerName: { $first: '$customerName' },
+          phoneNumber: { $first: '$phoneNumber' },
+          totalOrders: { $sum: 1 },
+          completedOrders: {
+            $sum: { $cond: [{ $eq: ['$orderStatus', 'Completed'] }, 1, 0] },
+          },
+          cancelledOrders: {
+            $sum: { $cond: [{ $eq: ['$orderStatus', 'Cancelled'] }, 1, 0] },
+          },
+          totalSpent: {
+            $sum: {
+              $cond: [{ $ne: ['$orderStatus', 'Cancelled'] }, '$totalAmount', 0],
+            },
+          },
+          lastOrderDate: { $max: '$createdAt' },
+          firstOrderDate: { $min: '$createdAt' },
+          tables: { $addToSet: '$tableNumber' },
+          recentOrders: {
+            $push: {
+              _id: '$_id',
+              orderNumber: '$orderNumber',
+              totalAmount: '$totalAmount',
+              orderStatus: '$orderStatus',
+              createdAt: '$createdAt',
+              tableNumber: '$tableNumber',
+              itemsCount: { $size: { $ifNull: ['$items', []] } },
+            },
+          },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          customerKey: '$_id',
+          customerName: 1,
+          phoneNumber: { $ifNull: ['$phoneNumber', '$_id'] },
+          totalOrders: 1,
+          completedOrders: 1,
+          cancelledOrders: 1,
+          totalSpent: { $round: ['$totalSpent', 2] },
+          lastOrderDate: 1,
+          firstOrderDate: 1,
+          tables: 1,
+          recentOrders: { $slice: ['$recentOrders', 10] },
+        },
+      },
+    ];
+
+    if (search && search.trim()) {
+      const regex = new RegExp(search.trim(), 'i');
+      pipeline.push({
+        $match: {
+          $or: [{ customerName: regex }, { phoneNumber: regex }],
+        },
+      });
+    }
+
+    let sortStage = { totalOrders: -1, lastOrderDate: -1 };
+    if (sortBy === 'spent') {
+      sortStage = { totalSpent: -1, totalOrders: -1 };
+    } else if (sortBy === 'recent') {
+      sortStage = { lastOrderDate: -1 };
+    } else if (sortBy === 'name') {
+      sortStage = { customerName: 1 };
+    }
+
+    pipeline.push({ $sort: sortStage });
+
+    const customers = await Order.aggregate(pipeline);
+
+    // Summary calculations
+    const totalCustomers = customers.length;
+    const repeatCustomers = customers.filter((c) => c.totalOrders > 1).length;
+    const totalRevenue = customers.reduce((acc, c) => acc + (c.totalSpent || 0), 0);
+
+    res.status(200).json({
+      success: true,
+      count: customers.length,
+      summary: {
+        totalCustomers,
+        repeatCustomers,
+        totalRevenue: Math.round(totalRevenue * 100) / 100,
+      },
+      data: customers,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+

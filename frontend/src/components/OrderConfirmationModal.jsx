@@ -1,12 +1,13 @@
 import React from 'react';
+import { createPortal } from 'react-dom';
 import { CheckCircle2, Coffee, ArrowRight, MapPin, Phone, User, Clock } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const OrderConfirmationModal = ({ order, onClose }) => {
   if (!order) return null;
 
-  return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+  const modalContent = (
+    <div className="fixed inset-0 z-[9999] overflow-y-auto bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
       <div className="relative w-full max-w-lg bg-[#faf7f2] rounded-3xl border border-[#ebdccd] shadow-2xl p-6 sm:p-8 text-[#2e1c14] animate-scale-in">
         {/* Success Icon Badge */}
         <div className="flex items-center justify-center gap-3 mb-4">
@@ -94,6 +95,12 @@ const OrderConfirmationModal = ({ order, onClose }) => {
       </div>
     </div>
   );
+
+  if (typeof document === 'undefined') {
+    return modalContent;
+  }
+
+  return createPortal(modalContent, document.body);
 };
 
 export default OrderConfirmationModal;

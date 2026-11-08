@@ -1,5 +1,5 @@
 import express from 'express';
-import { adminLogin, getAdminStats } from '../controllers/adminController.js';
+import { adminLogin, getAdminStats, getAdminCustomers } from '../controllers/adminController.js';
 import { verifyAdmin } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
@@ -49,6 +49,22 @@ router.post('/login', adminLogin);
  *         description: Unauthorized
  */
 router.get('/stats', verifyAdmin, getAdminStats);
+
+/**
+ * @openapi
+ * /api/admin/customers:
+ *   get:
+ *     summary: Get unique customer profiles with order counts and metrics
+ *     tags: [Admin]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Customers list retrieved successfully
+ *       401:
+ *         description: Unauthorized
+ */
+router.get('/customers', verifyAdmin, getAdminCustomers);
 
 export default router;
 

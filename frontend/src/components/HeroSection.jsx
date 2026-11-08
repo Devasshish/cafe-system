@@ -45,8 +45,7 @@ const HeroSection = () => {
       </svg>
 
       {/* Ambient Floating Coffee Beans in background */}
-      <div className="absolute top-8 left-8 sm:left-24 w-5 h-7 rounded-[50%] bg-[#331B0F] -rotate-45 shadow-md opacity-85 pointer-events-none" />
-      <div className="absolute top-1/4 left-10 sm:left-32 w-4 h-6 rounded-[50%] bg-[#331B0F] rotate-12 shadow-md opacity-75 pointer-events-none" />
+      <div className="absolute top-8 left-8 sm:left-28 w-5 h-7 rounded-[50%] bg-[#331B0F] -rotate-45 shadow-md opacity-70 pointer-events-none" />
       <div className="absolute bottom-12 left-16 sm:left-44 w-4 h-6 rounded-[50%] bg-[#331B0F] rotate-45 shadow-md opacity-70 pointer-events-none hidden sm:block" />
       <div className="absolute top-10 right-12 sm:right-28 w-5 h-7 rounded-[50%] bg-[#331B0F] rotate-45 shadow-md opacity-80 pointer-events-none" />
       <div className="absolute top-1/2 right-8 sm:right-20 w-4 h-6 rounded-[50%] bg-[#331B0F] -rotate-12 shadow-md opacity-75 pointer-events-none" />
@@ -54,11 +53,12 @@ const HeroSection = () => {
 
       {/* 
         LEFT-SIDE HIGHLIGHTED ARTISAN NOTE:
-        - Anchored to the far left with MINOR space/margin (no big gap)
-        - Compact width so it NEVER collides with the giant "Ex" text
+        - Restored to exact vertical center (md:top-1/2 md:-translate-y-1/2)
+        - Minor left spacing (md:left-3 lg:left-5 xl:left-8)
+        - Tuned width & typography scale to guarantee NO overlap with "Experience"
       */}
-      <div className="w-full md:w-auto md:absolute md:left-3 lg:left-5 xl:left-8 md:top-[50%] md:-translate-y-1/2 md:max-w-[210px] lg:max-w-[240px] xl:max-w-[260px] text-left z-20 px-4 sm:px-6 md:px-0 my-2 md:my-0">
-        <div className="space-y-1 border-l-[3px] border-[#B23B14] pl-3 py-0.5 bg-[#F6EFE5]/85 md:bg-transparent backdrop-blur-xs md:backdrop-blur-none rounded-r-lg md:rounded-none">
+      <div className="w-full md:w-auto md:absolute md:left-3 lg:left-5 xl:left-8 md:top-1/2 md:-translate-y-1/2 md:max-w-[195px] lg:max-w-[225px] xl:max-w-[250px] text-left z-20 px-4 sm:px-6 md:px-0 my-2 md:my-0 pointer-events-auto">
+        <div className="space-y-1 border-l-[3px] border-[#B23B14] pl-3 py-0.5 bg-[#F6EFE5]/90 md:bg-transparent backdrop-blur-xs md:backdrop-blur-none rounded-r-lg md:rounded-none">
           <span className="font-sans font-black text-[11px] sm:text-xs uppercase tracking-wider text-[#B23B14] block">
             Single-Origin
           </span>
@@ -90,7 +90,7 @@ const HeroSection = () => {
         */}
         <div className="relative w-full flex flex-col items-center justify-center min-h-[380px] sm:min-h-[500px] md:min-h-[580px] lg:min-h-[640px] pt-1 pb-4">
           {/* Base Layer (z-10): Massive Bold Organic Headline Typography in Fraunces */}
-          <h1 className="relative z-10 font-serif font-black text-6xl sm:text-8xl md:text-9xl lg:text-[144px] xl:text-[168px] text-[#331B0F] leading-[0.84] tracking-tight select-none -translate-y-2 sm:-translate-y-4">
+          <h1 className="relative z-10 font-serif font-black text-5xl sm:text-6xl md:text-7xl lg:text-[88px] xl:text-[114px] 2xl:text-[140px] text-[#331B0F] leading-[0.86] tracking-tight select-none -translate-y-2 sm:-translate-y-4">
             Coffee <br />
             Experience
           </h1>

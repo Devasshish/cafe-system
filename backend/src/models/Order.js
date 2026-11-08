@@ -58,6 +58,10 @@ const orderSchema = new mongoose.Schema(
       trim: true,
       match: [/^\+?[0-9\s-]{7,15}$/, 'Please provide a valid phone number'],
     },
+    isPhoneVerified: {
+      type: Boolean,
+      default: false,
+    },
     tableNumber: {
       type: String,
       required: [true, 'Table number is required'],
