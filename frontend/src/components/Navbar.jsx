@@ -63,11 +63,11 @@ const Navbar = () => {
           {/* ========================================================= */}
           {/* MOBILE VIEW (< md): Name Left, Logo Center, Tray Right */}
           {/* ========================================================= */}
-          <div className="md:hidden h-20 sm:h-22 flex items-center justify-between relative">
+          <div className="md:hidden h-22 sm:h-24 flex items-center justify-between relative">
             {/* Left: Brand Name */}
             <Link
               to={tableNumber ? `/?table=${tableNumber}` : '/'}
-              className="flex flex-col z-10"
+              className="flex flex-col z-10 max-w-[110px]"
             >
               <span className="font-sans font-extrabold text-xl sm:text-2xl text-[#331B0F] tracking-tight leading-tight hover:text-[#B23B14] transition-colors">
                 recharge
@@ -77,7 +77,7 @@ const Navbar = () => {
               </span>
             </Link>
 
-            {/* Center: Brand Logo Image (Enlarged & Mathematically Centered) */}
+            {/* Center: Brand Logo Image (Prominent Bold Size & Mathematically Centered) */}
             <Link
               to={tableNumber ? `/?table=${tableNumber}` : '/'}
               className="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 z-10"
@@ -86,7 +86,7 @@ const Navbar = () => {
               <img
                 src="/logo.png"
                 alt="Recharge Café Logo"
-                className="w-14 h-14 sm:w-16 sm:h-16 rounded-full object-cover ring-[2.5px] ring-[#EBDDCC] shadow-lg active:scale-95 transition-transform"
+                className="w-[68px] h-[68px] sm:w-[80px] sm:h-[80px] rounded-full object-cover ring-3 ring-[#EBDDCC] shadow-xl active:scale-95 transition-transform"
               />
             </Link>
 
@@ -112,7 +112,7 @@ const Navbar = () => {
           {/* ========================================================= */}
           {/* DESKTOP VIEW (>= md): Logo + Name on Left, Nav + Table + Tray on Right */}
           {/* ========================================================= */}
-          <div className="hidden md:flex h-20 sm:h-24 items-center justify-between">
+          <div className="hidden md:flex h-22 sm:h-24 items-center justify-between">
             {/* Brand Logo & Clean Typography */}
             <Link
               to={tableNumber ? `/?table=${tableNumber}` : '/'}
@@ -122,7 +122,7 @@ const Navbar = () => {
                 <img
                   src="/logo.png"
                   alt="Recharge Café"
-                  className="w-13 h-13 sm:w-16 sm:h-16 md:w-18 md:h-18 rounded-full object-cover ring-2 ring-[#EBDDCC] shadow-md transition-transform duration-300 group-hover:scale-105"
+                  className="w-16 h-16 sm:w-18 sm:h-18 md:w-20 md:h-20 rounded-full object-cover ring-3 ring-[#EBDDCC] shadow-md transition-transform duration-300 group-hover:scale-105"
                 />
               </div>
               <div className="flex flex-col">
