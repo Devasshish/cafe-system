@@ -7,6 +7,7 @@ import MainLayout from './layouts/MainLayout';
 import HomePage from './pages/HomePage';
 import CartPage from './pages/CartPage';
 import AdminPage from './pages/AdminPage';
+import NotFoundPage from './pages/NotFoundPage';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
                 <Route path="menu" element={<HomePage />} />
                 <Route path="cart" element={<CartPage />} />
                 <Route path="admin" element={<AdminPage />} />
+                <Route path="*" element={<NotFoundPage />} />
               </Route>
             </Routes>
           </CartProvider>

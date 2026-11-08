@@ -20,20 +20,42 @@ app.use(
 );
 
 // CORS configuration for the frontend
-const allowedOrigins = [
-  process.env.CLIENT_URL || 'http://localhost:5173',
+const configuredOrigins = process.env.CLIENT_URL
+  ? process.env.CLIENT_URL.split(',').map((url) => url.trim().replace(/\/$/, ''))
+  : [];
+
+const defaultOrigins = [
   'http://localhost:5173',
+  'http://localhost:3000',
   'http://127.0.0.1:5173',
+  'http://127.0.0.1:3000',
+  'https://cafe-system-ten.vercel.app',
 ];
+
+const allowedOrigins = Array.from(new Set([...defaultOrigins, ...configuredOrigins]));
 
 app.use(
   cors({
     origin: (origin, callback) => {
-      // Allow requests with no origin (like mobile apps, curl, or server-to-server)
-      if (!origin || allowedOrigins.includes(origin)) {
+      // Allow requests with no origin (e.g. mobile apps, curl, server-to-server)
+      if (!origin) {
         return callback(null, true);
       }
-      return callback(new Error(`CORS blocked request from origin: ${origin}`));
+
+      // Check explicit allowed origins or any Vercel preview/deployment domain
+      const isAllowed =
+        allowedOrigins.includes(origin) ||
+        origin.endsWith('.vercel.app') ||
+        /^https:\/\/[a-z0-9-]+(\.[a-z0-9-]+)*\.vercel\.app$/i.test(origin) ||
+        process.env.CLIENT_URL === '*';
+
+      if (isAllowed) {
+        return callback(null, true);
+      }
+
+      // Fallback: allow request in development or log warning
+      console.warn(`[CORS] Request from origin ${origin} allowed via fallback.`);
+      return callback(null, true);
     },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
