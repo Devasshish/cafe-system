@@ -63,21 +63,21 @@ const Navbar = () => {
           {/* ========================================================= */}
           {/* MOBILE VIEW (< md): Name Left, Logo Center, Tray Right */}
           {/* ========================================================= */}
-          <div className="md:hidden h-18 sm:h-20 flex items-center justify-between relative">
+          <div className="md:hidden h-20 sm:h-22 flex items-center justify-between relative">
             {/* Left: Brand Name */}
             <Link
               to={tableNumber ? `/?table=${tableNumber}` : '/'}
               className="flex flex-col z-10"
             >
-              <span className="font-sans font-extrabold text-xl text-[#331B0F] tracking-tight leading-tight hover:text-[#B23B14] transition-colors">
+              <span className="font-sans font-extrabold text-xl sm:text-2xl text-[#331B0F] tracking-tight leading-tight hover:text-[#B23B14] transition-colors">
                 recharge
               </span>
-              <span className="text-[9px] font-semibold text-[#7D5F4C] tracking-widest uppercase font-sans">
+              <span className="text-[9px] sm:text-[10px] font-semibold text-[#7D5F4C] tracking-widest uppercase font-sans">
                 Café & Eatery
               </span>
             </Link>
 
-            {/* Center: Brand Logo Image (Mathematically Centered) */}
+            {/* Center: Brand Logo Image (Enlarged & Mathematically Centered) */}
             <Link
               to={tableNumber ? `/?table=${tableNumber}` : '/'}
               className="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 z-10"
@@ -86,7 +86,7 @@ const Navbar = () => {
               <img
                 src="/logo.png"
                 alt="Recharge Café Logo"
-                className="w-11 h-11 rounded-full object-cover ring-2 ring-[#EBDDCC] shadow-md active:scale-95 transition-transform"
+                className="w-14 h-14 sm:w-16 sm:h-16 rounded-full object-cover ring-[2.5px] ring-[#EBDDCC] shadow-lg active:scale-95 transition-transform"
               />
             </Link>
 
@@ -94,14 +94,14 @@ const Navbar = () => {
             <div className="flex items-center justify-end z-10">
               <Link
                 to="/cart"
-                className="relative inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-[#B23B14] active:bg-[#962E0B] text-white text-xs font-bold tracking-wide transition-all shadow-sm active:scale-95 cursor-pointer font-sans whitespace-nowrap group"
+                className="relative inline-flex items-center gap-1.5 px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-full bg-[#B23B14] active:bg-[#962E0B] text-white text-xs sm:text-sm font-bold tracking-wide transition-all shadow-sm active:scale-95 cursor-pointer font-sans whitespace-nowrap group"
                 aria-label={`My Coffee Tray, ${totalCount} items`}
                 title="View Coffee Tray"
               >
-                <ShoppingBag className="w-3.5 h-3.5 stroke-[2.2] group-hover:scale-110 transition-transform" />
+                <ShoppingBag className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[2.2] group-hover:scale-110 transition-transform" />
                 <span>Tray</span>
                 {totalCount > 0 && (
-                  <span className="min-w-[18px] h-[18px] px-1 rounded-full bg-white text-[#B23B14] text-[10px] font-black leading-none flex items-center justify-center shadow-xs">
+                  <span className="min-w-[18px] sm:min-w-[20px] h-[18px] sm:h-[20px] px-1 rounded-full bg-white text-[#B23B14] text-[10px] sm:text-[11px] font-black leading-none flex items-center justify-center shadow-xs">
                     {totalCount}
                   </span>
                 )}

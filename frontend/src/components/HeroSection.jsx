@@ -44,21 +44,18 @@ const HeroSection = () => {
         />
       </svg>
 
-      {/* Ambient Floating Coffee Beans in background */}
-      <div className="absolute top-8 left-8 sm:left-28 w-5 h-7 rounded-[50%] bg-[#331B0F] -rotate-45 shadow-md opacity-70 pointer-events-none" />
-      <div className="absolute bottom-12 left-16 sm:left-44 w-4 h-6 rounded-[50%] bg-[#331B0F] rotate-45 shadow-md opacity-70 pointer-events-none hidden sm:block" />
+      {/* Ambient Floating Coffee Beans in background (Right side only; Left side removed so no coffee touches Single-Origin text) */}
       <div className="absolute top-10 right-12 sm:right-28 w-5 h-7 rounded-[50%] bg-[#331B0F] rotate-45 shadow-md opacity-80 pointer-events-none" />
       <div className="absolute top-1/2 right-8 sm:right-20 w-4 h-6 rounded-[50%] bg-[#331B0F] -rotate-12 shadow-md opacity-75 pointer-events-none" />
       <div className="absolute bottom-16 right-20 sm:right-40 w-3.5 h-5 rounded-[50%] bg-[#331B0F] -rotate-45 shadow-md opacity-65 pointer-events-none hidden sm:block" />
 
       {/* 
         LEFT-SIDE HIGHLIGHTED ARTISAN NOTE:
-        - Restored to exact vertical center (md:top-1/2 md:-translate-y-1/2)
-        - Minor left spacing (md:left-3 lg:left-5 xl:left-8)
-        - Tuned width & typography scale to guarantee NO overlap with "Experience"
+        - Positioned cleanly with dedicated padding
+        - Clean background guarantee NO background elements overlap it
       */}
       <div className="w-full md:w-auto md:absolute md:left-3 lg:left-5 xl:left-8 md:top-1/2 md:-translate-y-1/2 md:max-w-[195px] lg:max-w-[225px] xl:max-w-[250px] text-left z-20 px-4 sm:px-6 md:px-0 my-2 md:my-0 pointer-events-auto">
-        <div className="space-y-1 border-l-[3px] border-[#B23B14] pl-3 py-0.5 bg-[#F6EFE5]/90 md:bg-transparent backdrop-blur-xs md:backdrop-blur-none rounded-r-lg md:rounded-none">
+        <div className="space-y-1 border-l-[3px] border-[#B23B14] pl-3 py-1 bg-[#F6EFE5]/95 md:bg-[#F6EFE5]/80 backdrop-blur-sm rounded-r-xl shadow-xs">
           <span className="font-sans font-black text-[11px] sm:text-xs uppercase tracking-wider text-[#B23B14] block">
             Single-Origin
           </span>
@@ -72,25 +69,25 @@ const HeroSection = () => {
       <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center text-center">
         {/* Table indicator pill badge if scanned */}
         {hasTable && (
-          <div className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-[#B23B14] text-white text-xs font-bold mb-2 shadow-md animate-bounce z-20">
+          <div className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-[#B23B14] text-white text-xs font-bold mb-1 shadow-md animate-bounce z-20">
             <MapPin className="w-3.5 h-3.5" />
             <span>Ordering for Table {tableNumber}</span>
           </div>
         )}
 
-        {/* Top Tagline */}
-        <p className="font-serif font-bold text-lg sm:text-2xl md:text-3xl text-[#331B0F] tracking-tight mb-1 sm:mb-2 select-none">
+        {/* Top Tagline (Tightly spaced to headline) */}
+        <p className="font-serif font-bold text-lg sm:text-2xl md:text-3xl text-[#331B0F] tracking-tight -mb-1 sm:-mb-2 md:-mb-3 select-none leading-none z-20">
           An Elevated
         </p>
 
         {/* 
           CENTRAL COMPOSITION: 
-          - "Coffee Experience" headline at lower z-index (z-10)
+          - "Coffee Experience" headline at lower z-index (z-10) with enlarged typography
           - BIG COFFEE CUP layered ON TOP with HIGHER Z-INDEX (z-20)
         */}
-        <div className="relative w-full flex flex-col items-center justify-center min-h-[380px] sm:min-h-[500px] md:min-h-[580px] lg:min-h-[640px] pt-1 pb-4">
-          {/* Base Layer (z-10): Massive Bold Organic Headline Typography in Fraunces */}
-          <h1 className="relative z-10 font-serif font-black text-5xl sm:text-6xl md:text-7xl lg:text-[88px] xl:text-[114px] 2xl:text-[140px] text-[#331B0F] leading-[0.86] tracking-tight select-none -translate-y-2 sm:-translate-y-4">
+        <div className="relative w-full flex flex-col items-center justify-center min-h-[380px] sm:min-h-[500px] md:min-h-[580px] lg:min-h-[640px] pt-0 pb-4">
+          {/* Base Layer (z-10): Massive Bold Organic Headline Typography in Fraunces (Enlarged Size) */}
+          <h1 className="relative z-10 font-serif font-black text-[58px] sm:text-[76px] md:text-[96px] lg:text-[120px] xl:text-[146px] 2xl:text-[170px] text-[#331B0F] leading-[0.84] tracking-tight select-none -translate-y-1 sm:-translate-y-2">
             Coffee <br />
             Experience
           </h1>
@@ -109,8 +106,8 @@ const HeroSection = () => {
             </div>
           </div>
 
-          {/* Top Layer (z-30): Pure Vector/CSS Scalloped Rosette "Order now" Stamp Button */}
-          <div className="relative z-30 mt-6 sm:mt-8 md:mt-10 flex items-center justify-center">
+          {/* Top Layer (z-30): Pure Vector/CSS Scalloped Rosette "Order now" Stamp Button (Shifted lower down) */}
+          <div className="relative z-30 mt-12 sm:mt-16 md:mt-20 lg:mt-24 flex items-center justify-center">
             <button
               onClick={handleScrollToMenu}
               type="button"
