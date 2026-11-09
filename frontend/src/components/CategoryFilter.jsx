@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import api from '../services/api';
 import { Coffee, Flame, Sparkles } from 'lucide-react';
 
-const CATEGORIES = [
+const DEFAULT_CATEGORIES = [
   { id: '', label: 'All Coffee' },
   { id: 'cappuccino', label: 'Cappuccino' },
   { id: 'latte', label: 'Latte' },
@@ -10,15 +11,39 @@ const CATEGORIES = [
   { id: 'cold coffee', label: 'Cold Coffee' },
   { id: 'hot coffee', label: 'Hot Coffee' },
   { id: 'flat white', label: 'Flat White' },
+  { id: 'bakery', label: 'Bakery & Bites' },
 ];
 
 const CategoryFilter = ({ activeCategory, onSelectCategory }) => {
+  const [categories, setCategories] = useState(DEFAULT_CATEGORIES);
+
+  useEffect(() => {
+    const loadCategories = async () => {
+      try {
+        const res = await api.get('/categories');
+        if (res.data && res.data.success && res.data.data?.length > 0) {
+          const apiCats = [
+            { id: '', label: 'All Coffee' },
+            ...res.data.data.map((c) => ({
+              id: c.name,
+              label: c.label,
+            })),
+          ];
+          setCategories(apiCats);
+        }
+      } catch (err) {
+        console.warn('Could not load dynamic categories, using defaults:', err);
+      }
+    };
+    loadCategories();
+  }, []);
+
   return (
     <div className="relative w-full">
       {/* Horizontal scrollable pills with edge padding on mobile */}
       <div className="-mx-4 px-4 sm:mx-0 sm:px-0 flex items-center justify-start sm:justify-center gap-2 overflow-x-auto py-1 scroll-smooth [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-        {CATEGORIES.map((cat) => {
-          const isActive = activeCategory.toLowerCase() === cat.id.toLowerCase();
+        {categories.map((cat) => {
+          const isActive = (activeCategory || '').toLowerCase() === (cat.id || '').toLowerCase();
 
           return (
             <button

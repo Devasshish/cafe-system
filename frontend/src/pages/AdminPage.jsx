@@ -5,6 +5,7 @@ import AdminOverview from '../components/admin/AdminOverview';
 import AdminMenu from '../components/admin/AdminMenu';
 import AdminOrders from '../components/admin/AdminOrders';
 import AdminCustomers from '../components/admin/AdminCustomers';
+import AdminCategories from '../components/admin/AdminCategories';
 import QRGenerator from '../components/QRGenerator';
 import {
   LayoutDashboard,
@@ -12,6 +13,7 @@ import {
   ShoppingBag,
   Users,
   QrCode,
+  Tag,
   LogOut,
   ExternalLink,
   Menu as MenuIcon,
@@ -35,6 +37,7 @@ const AdminPage = () => {
     { id: 'orders', label: 'Live Orders', icon: ShoppingBag },
     { id: 'customers', label: 'Customers', icon: Users },
     { id: 'menu', label: 'Menu Catalog', icon: UtensilsCrossed },
+    { id: 'categories', label: 'Categories', icon: Tag },
     { id: 'qr', label: 'Table QR Generator', icon: QrCode },
   ];
 
@@ -128,6 +131,7 @@ const AdminPage = () => {
         {activeTab === 'orders' && <AdminOrders />}
         {activeTab === 'customers' && <AdminCustomers />}
         {activeTab === 'menu' && <AdminMenu />}
+        {activeTab === 'categories' && <AdminCategories />}
         {activeTab === 'qr' && <QRGenerator />}
       </main>
     </div>

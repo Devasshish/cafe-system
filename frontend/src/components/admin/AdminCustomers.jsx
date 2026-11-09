@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import { createPortal } from 'react-dom';
 import api from '../../services/api';
 import {
   Users,
@@ -371,9 +372,9 @@ const AdminCustomers = () => {
         </div>
       )}
 
-      {/* Customer Details Modal / Drawer */}
-      {selectedCustomer && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs">
+      {/* Customer Details Modal / Drawer rendered into document.body */}
+      {selectedCustomer && typeof document !== 'undefined' && createPortal(
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
           <div className="bg-white w-full max-w-xl rounded-3xl border border-[#ebdccd] shadow-2xl p-6 sm:p-7 relative max-h-[90vh] overflow-y-auto space-y-5 animate-in fade-in zoom-in-95 duration-200">
             {/* Modal Header */}
             <div className="flex items-start justify-between border-b border-[#f4ebe1] pb-4">
@@ -507,7 +508,8 @@ const AdminCustomers = () => {
               </button>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );

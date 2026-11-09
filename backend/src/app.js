@@ -10,6 +10,7 @@ import orderRoutes from './routes/orderRoutes.js';
 import adminRoutes from './routes/adminRoutes.js';
 import otpRoutes from './routes/otpRoutes.js';
 import tableRoutes from './routes/tableRoutes.js';
+import categoryRoutes from './routes/categoryRoutes.js';
 import { notFound, errorHandler } from './middleware/errorMiddleware.js';
 
 const app = express();
@@ -90,6 +91,7 @@ app.use('/api/orders', orderRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/otp', otpRoutes);
 app.use('/api/tables', tableRoutes);
+app.use('/api/categories', categoryRoutes);
 
 app.get('/', (req, res) => {
   res.json({

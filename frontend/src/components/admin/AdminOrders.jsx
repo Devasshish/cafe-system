@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import api from '../../services/api';
 import {
   Clock,
@@ -198,9 +199,9 @@ const AdminOrders = () => {
         </div>
       )}
 
-      {/* Order Details Drawer / Modal */}
-      {selectedOrder && (
-        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
+      {/* Order Details Drawer / Modal rendered into document.body */}
+      {selectedOrder && typeof document !== 'undefined' && createPortal(
+        <div className="fixed inset-0 z-[9999] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in">
           <div className="w-full max-w-md bg-white rounded-3xl p-6 sm:p-7 border border-[#ebdccd] shadow-2xl animate-scale-in text-[#2e1c14]">
             <div className="flex items-center justify-between pb-3 border-b border-[#f4ebe1] mb-4">
               <div>
@@ -281,7 +282,8 @@ const AdminOrders = () => {
               Close
             </button>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import api from '../../services/api';
 import {
   Plus,
@@ -13,13 +14,40 @@ import {
   Image as ImageIcon,
 } from 'lucide-react';
 
-const CATEGORIES = ['hot coffee', 'cold coffee', 'tea', 'bakery', 'desserts', 'beverages'];
+const DEFAULT_CATEGORIES = [
+  { name: 'cappuccino', label: 'Cappuccino' },
+  { name: 'latte', label: 'Latte' },
+  { name: 'mocha', label: 'Mocha' },
+  { name: 'frappuccino', label: 'Frappuccino' },
+  { name: 'cold coffee', label: 'Cold Coffee' },
+  { name: 'hot coffee', label: 'Hot Coffee' },
+  { name: 'flat white', label: 'Flat White' },
+  { name: 'bakery', label: 'Bakery & Bites' },
+  { name: 'desserts', label: 'Desserts' },
+  { name: 'beverages', label: 'Artisan Beverages' },
+];
 
 const AdminMenu = () => {
   const [items, setItems] = useState([]);
+  const [categoriesList, setCategoriesList] = useState(DEFAULT_CATEGORIES);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
+
+  // Fetch dynamic categories
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const res = await api.get('/categories');
+        if (res.data && res.data.success && res.data.data?.length > 0) {
+          setCategoriesList(res.data.data);
+        }
+      } catch (err) {
+        console.warn('Could not fetch categories in AdminMenu:', err);
+      }
+    };
+    fetchCategories();
+  }, []);
 
   // Modal State
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -188,9 +216,9 @@ const AdminMenu = () => {
           className="px-4 py-2.5 rounded-2xl bg-[#faf7f2] border border-[#e5d5c5] text-xs sm:text-sm text-[#4a3325] capitalize focus:outline-none focus:ring-2 focus:ring-[#c86227]/40 cursor-pointer"
         >
           <option value="">All Categories</option>
-          {CATEGORIES.map((cat) => (
-            <option key={cat} value={cat}>
-              {cat}
+          {categoriesList.map((cat) => (
+            <option key={cat._id || cat.name} value={cat.name}>
+              {cat.label || cat.name}
             </option>
           ))}
         </select>
@@ -278,9 +306,9 @@ const AdminMenu = () => {
         </div>
       )}
 
-      {/* Add / Edit Modal */}
-      {isModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
+      {/* Add / Edit Modal rendered into document.body to ensure complete full-bleed coverage without top bar leak */}
+      {isModalOpen && typeof document !== 'undefined' && createPortal(
+        <div className="fixed inset-0 z-[9999] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in">
           <div className="w-full max-w-lg bg-white rounded-3xl p-6 sm:p-8 border border-[#ebdccd] shadow-2xl animate-scale-in text-[#2e1c14] max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between pb-4 border-b border-[#f4ebe1] mb-5">
               <h3 className="font-serif font-bold text-xl text-[#2e1c14]">
@@ -336,9 +364,9 @@ const AdminMenu = () => {
                     onChange={(e) => setCategory(e.target.value)}
                     className="w-full px-3.5 py-2.5 rounded-2xl bg-[#faf7f2] border border-[#e5d5c5] text-sm text-[#2e1c14] capitalize focus:outline-none focus:ring-2 focus:ring-[#c86227]/40 cursor-pointer"
                   >
-                    {CATEGORIES.map((cat) => (
-                      <option key={cat} value={cat}>
-                        {cat}
+                    {categoriesList.map((cat) => (
+                      <option key={cat._id || cat.name} value={cat.name}>
+                        {cat.label || cat.name}
                       </option>
                     ))}
                   </select>
@@ -411,7 +439,8 @@ const AdminMenu = () => {
               </div>
             </form>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );
