@@ -102,3 +102,4 @@ router
 router.route('/:id/toggle').patch(verifyAdmin, toggleCategory);
 
 export default router;
+

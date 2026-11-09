@@ -1,7 +1,7 @@
 # Recharge Café — Specialty Menu & Order Management System
 
 [![MERN Stack](https://img.shields.io/badge/Stack-MongoDB%20%7C%20Express%20%7C%20React%20%7C%20Node-47A248?style=for-the-badge&logo=mongodb&logoColor=white)](https://mongodb.com)
-[![Swagger Docs](https://img.shields.io/badge/API%20Docs-Swagger%20OpenAPI%203.0-85EA2D?style=for-the-badge&logo=swagger&logoColor=black)](http://localhost:5000/api/docs)
+[![Swagger Docs](https://img.shields.io/badge/API%20Docs-Swagger%20OpenAPI%203.0-85EA2D?style=for-the-badge&logo=swagger&logoColor=black)](https://cafe-system-hs1i.onrender.com/api/docs)
 [![Docker Support](https://img.shields.io/badge/Docker-Ready%20Compose-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://docker.com)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
 
@@ -14,9 +14,9 @@ A modern, production-ready Full-Stack MERN ordering application for specialty ca
 | Service | Platform | Live URL |
 | :--- | :--- | :--- |
 | **Frontend Application** | Vercel | [https://cafe-system-ten.vercel.app](https://cafe-system-ten.vercel.app) |
-| **Backend API** | Render | `https://your-backend.onrender.com` *(Replace with your Render URL)* |
-| **Interactive API Docs** | Swagger UI | [http://localhost:5000/api/docs](http://localhost:5000/api/docs) |
-| **API Health Check** | Render/Express | `http://localhost:5000/api/health` |
+| **Backend API** | Render | [https://cafe-system-hs1i.onrender.com](https://cafe-system-hs1i.onrender.com) |
+| **Interactive API Docs** | Swagger UI | [https://cafe-system-hs1i.onrender.com/api/docs](https://cafe-system-hs1i.onrender.com/api/docs) |
+| **API Health Check** | Render/Express | [https://cafe-system-hs1i.onrender.com/api/health](https://cafe-system-hs1i.onrender.com/api/health) |
 
 ---
 
@@ -153,7 +153,7 @@ Frontend will run at `http://localhost:5173`.
 ## 📖 API Documentation (Swagger)
 
 The full interactive OpenAPI 3.0 documentation is available at:
-`http://localhost:5000/api/docs`
+[https://cafe-system-hs1i.onrender.com/api/docs](https://cafe-system-hs1i.onrender.com/api/docs)
 
 Key endpoints:
 | Method | Endpoint | Description |
@@ -182,7 +182,7 @@ Render free-tier instances sleep after 15 minutes of inactivity. This repository
 2. **Standalone Script (`backend/scripts/cron-ping.js`)**:
    Can be triggered from an external cron service (such as cron-job.org or GitHub Actions):
    ```bash
-   node scripts/cron-ping.js https://your-backend.onrender.com
+   node scripts/cron-ping.js https://cafe-system-hs1i.onrender.com
    ```
 
 ---
